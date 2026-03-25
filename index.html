@@ -1,0 +1,2382 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>דשבורד פיננסי — גיל קרן</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #0a0e1a;
+  --bg-card: #111827;
+  --bg-card-hover: #1a2235;
+  --bg-elevated: #1e293b;
+  --border: rgba(255,255,255,0.06);
+  --border-accent: rgba(99,212,170,0.2);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-green: #63d4aa;
+  --accent-green-dim: rgba(99,212,170,0.15);
+  --accent-blue: #60a5fa;
+  --accent-blue-dim: rgba(96,165,250,0.15);
+  --accent-amber: #fbbf24;
+  --accent-amber-dim: rgba(251,191,36,0.15);
+  --accent-rose: #fb7185;
+  --accent-rose-dim: rgba(251,113,133,0.15);
+  --accent-purple: #a78bfa;
+  --accent-purple-dim: rgba(167,139,250,0.15);
+  --gradient-hero: linear-gradient(135deg, #63d4aa 0%, #60a5fa 50%, #a78bfa 100%);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-glow: 0 0 60px rgba(99,212,170,0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Heebo', 'Rubik', sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Ambient background */
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  right: -30%;
+  width: 80vw;
+  height: 80vw;
+  background: radial-gradient(circle, rgba(99,212,170,0.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -30%;
+  left: -20%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(96,165,250,0.03) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app { position: relative; z-index: 1; }
+
+/* ── HEADER ── */
+.header {
+  padding: 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,14,26,0.85);
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.header-logo {
+  width: 42px;
+  height: 42px;
+  background: var(--gradient-hero);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--bg-deep);
+}
+.header-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.header-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.header-date {
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+}
+.header-user {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--bg-deep);
+}
+
+/* ── TAB BAR ── */
+.tab-bar {
+  position: sticky;
+  top: 73px;
+  z-index: 99;
+  background: rgba(10,14,26,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0 40px;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 16px 24px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tab-btn:hover { color: var(--text-secondary); }
+.tab-btn.active { color: var(--text-primary); }
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: transparent;
+  transition: background 0.3s;
+}
+.tab-btn.active::after {
+  background: var(--gradient-hero);
+}
+.tab-btn .tab-icon { font-size: 16px; }
+
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+
+/* ── MAIN LAYOUT ── */
+.main { max-width: 1440px; margin: 0 auto; padding: 32px 40px 80px; }
+
+/* ── HERO SECTION ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.hero-total {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 40px 48px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-glow);
+}
+.hero-total::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: var(--gradient-hero);
+}
+.hero-total::after {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(99,212,170,0.08), transparent 70%);
+  pointer-events: none;
+}
+.hero-label {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-label svg { width: 16px; height: 16px; opacity: 0.5; }
+.hero-amount {
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+  margin-bottom: 4px;
+  direction: ltr;
+  text-align: right;
+}
+.hero-amount-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+.hero-breakdown {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.hero-breakdown-item { display: flex; flex-direction: column; gap: 4px; }
+.hero-breakdown-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.hero-breakdown-value {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  direction: ltr;
+  text-align: right;
+}
+
+/* Donut Chart */
+.hero-chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.hero-chart-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+}
+.donut-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 20px;
+}
+.donut-svg { width: 200px; height: 200px; transform: rotate(-90deg); }
+.donut-svg circle {
+  fill: none;
+  stroke-width: 28;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.donut-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.donut-center-value {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+.donut-center-label { font-size: 11px; color: var(--text-muted); }
+.donut-legend { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+.legend-item { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.legend-label { flex: 1; color: var(--text-secondary); }
+.legend-value { font-weight: 600; font-size: 12px; direction: ltr; }
+
+/* ── SECTION HEADERS ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  margin-top: 40px;
+}
+.section-header:first-child { margin-top: 0; }
+.section-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.section-title { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+.section-badge {
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-weight: 600;
+  margin-right: auto;
+  margin-left: 0;
+}
+
+/* ── CARDS GRID ── */
+.cards-grid { display: grid; gap: 20px; }
+.cards-2 { grid-template-columns: repeat(2, 1fr); }
+.cards-3 { grid-template-columns: repeat(3, 1fr); }
+.cards-4 { grid-template-columns: repeat(4, 1fr); }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.card:hover {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+.card-status {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.status-active { background: var(--accent-green-dim); color: var(--accent-green); }
+.status-inactive { background: rgba(100,116,139,0.2); color: var(--text-muted); }
+.status-settled { background: var(--accent-amber-dim); color: var(--accent-amber); }
+
+.track-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(96,165,250,0.1);
+  border: 1px solid rgba(96,165,250,0.2);
+  color: var(--accent-blue);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  white-space: nowrap;
+}
+.track-badge::before {
+  content: '📍';
+  font-size: 11px;
+}
+.track-badge.track-green {
+  background: rgba(99,212,170,0.1);
+  border-color: rgba(99,212,170,0.2);
+  color: var(--accent-green);
+}
+.track-badge.track-purple {
+  background: rgba(167,139,250,0.1);
+  border-color: rgba(167,139,250,0.2);
+  color: var(--accent-purple);
+}
+
+.card-provider {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.card-name {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.card-policy {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  direction: ltr;
+  text-align: right;
+}
+.card-balance {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 4px;
+  direction: ltr;
+  text-align: right;
+}
+.card-balance-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.card-metrics { display: flex; flex-direction: column; gap: 12px; }
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+.metric-label { color: var(--text-secondary); }
+.metric-value { font-weight: 600; direction: ltr; }
+.metric-value.positive { color: var(--accent-green); }
+.metric-value.negative { color: var(--accent-rose); }
+
+.card-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+
+/* ── INSURANCE CARD SPECIAL ── */
+.insurance-coverage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+.coverage-item {
+  background: rgba(255,255,255,0.03);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  text-align: center;
+}
+.coverage-icon { font-size: 20px; margin-bottom: 6px; }
+.coverage-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+.coverage-value {
+  font-size: 16px;
+  font-weight: 700;
+  direction: ltr;
+}
+
+/* ── DEPOSITS TABLE ── */
+.table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: 20px;
+}
+.table-header-bar {
+  padding: 20px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.table-header-bar h3 { font-size: 16px; font-weight: 700; }
+.table-toggle {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.table-toggle:hover { border-color: var(--accent-green); color: var(--accent-green); }
+
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 14px 20px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  white-space: nowrap;
+}
+thead th.num { text-align: left; direction: ltr; }
+tbody td {
+  padding: 14px 20px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tbody td.num {
+  text-align: left;
+  direction: ltr;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+tbody tr:hover { background: rgba(255,255,255,0.02); }
+tbody tr:last-child td { border-bottom: none; }
+tfoot td {
+  padding: 16px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  border-top: 2px solid var(--border);
+  background: rgba(99,212,170,0.03);
+}
+tfoot td.num {
+  text-align: left;
+  direction: ltr;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── FEES TABLE ── */
+.fees-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.fee-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  transition: all 0.3s;
+}
+.fee-card:hover {
+  border-color: var(--border-accent);
+}
+.fee-card-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.fee-card-type { font-size: 11px; color: var(--text-muted); margin-bottom: 16px; }
+.fee-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+.fee-item:last-child { border-bottom: none; }
+.fee-item-label { color: var(--text-secondary); }
+.fee-item-value { font-weight: 600; direction: ltr; }
+.fee-highlight { color: var(--accent-green); }
+.fee-warning { color: var(--accent-amber); }
+
+/* ── RETIREMENT PROJECTION ── */
+.retirement-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 36px 40px;
+  margin-top: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.retirement-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(96,165,250,0.06), transparent 70%);
+  pointer-events: none;
+}
+.retirement-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.retirement-item { text-align: center; }
+.retirement-item-icon { font-size: 28px; margin-bottom: 10px; }
+.retirement-item-value {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  direction: ltr;
+  margin-bottom: 4px;
+}
+.retirement-item-label { font-size: 12px; color: var(--text-muted); }
+
+/* ── BAR CHART ── */
+.bar-chart-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin-top: 20px;
+}
+.bar-chart-title { font-size: 16px; font-weight: 700; margin-bottom: 24px; }
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 180px;
+  padding-bottom: 30px;
+  position: relative;
+}
+.bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  position: relative;
+}
+.bar-stack {
+  width: 100%;
+  max-width: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: stretch;
+}
+.bar-segment {
+  border-radius: 4px 4px 0 0;
+  min-height: 2px;
+  transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bar-segment:first-child { border-radius: 4px 4px 0 0; }
+.bar-label {
+  position: absolute;
+  bottom: -28px;
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.bar-legend {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.bar-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+.bar-legend-color { width: 12px; height: 12px; border-radius: 3px; }
+
+/* ── COLLAPSIBLE ── */
+.collapsible-trigger {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.collapsible-trigger .chevron {
+  transition: transform 0.3s;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.collapsible-trigger.open .chevron { transform: rotate(90deg); }
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.collapsible-content.open { max-height: 5000px; }
+
+/* ── EXPANDABLE CARDS ── */
+.card-expandable { cursor: pointer; }
+.card-expandable .card-expand-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+.card-expandable:hover .card-expand-hint { color: var(--accent-green); }
+.card-expandable .card-expand-hint .expand-arrow {
+  transition: transform 0.3s;
+  font-size: 10px;
+}
+.card-expandable.expanded .card-expand-hint .expand-arrow { transform: rotate(180deg); }
+.card-expandable.expanded .card-expand-hint .hint-text-closed { display: none; }
+.card-expandable:not(.expanded) .card-expand-hint .hint-text-open { display: none; }
+.card-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-expandable.expanded .card-details { max-height: 5000px; }
+.card-details-inner {
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px dashed var(--border);
+}
+.details-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-green);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.details-section-title:first-child { margin-top: 0; }
+
+/* ── SUMMARY CARD (for tab tops) ── */
+.summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 32px 40px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; left: 0;
+  height: 3px;
+  background: var(--gradient-hero);
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+}
+.summary-item { text-align: center; }
+.summary-item-icon { font-size: 24px; margin-bottom: 8px; }
+.summary-item-value {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  direction: ltr;
+  margin-bottom: 4px;
+}
+.summary-item-label { font-size: 12px; color: var(--text-muted); }
+
+/* ── CLINIC CATEGORY CARD ── */
+.cat-header {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cat-total {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 40px;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  margin-top: 60px;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes countUp {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-in {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1200px) {
+  .cards-3 { grid-template-columns: repeat(2, 1fr); }
+  .cards-4 { grid-template-columns: repeat(2, 1fr); }
+  .retirement-grid { grid-template-columns: repeat(2, 1fr); }
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .main { padding: 20px; }
+  .header { padding: 16px 20px; }
+  .tab-bar { padding: 0 16px; }
+  .tab-btn { padding: 14px 16px; font-size: 13px; }
+  .hero-amount { font-size: 40px; }
+  .cards-2, .cards-3, .cards-4 { grid-template-columns: 1fr; }
+  .retirement-grid { grid-template-columns: 1fr 1fr; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .insurance-coverage { grid-template-columns: 1fr; }
+  .fees-grid { grid-template-columns: 1fr; }
+  table { font-size: 12px; }
+  thead th, tbody td, tfoot td { padding: 10px 12px; }
+}
+@media (max-width: 600px) {
+  .hero-amount { font-size: 32px; }
+  .hero-total { padding: 24px; }
+  .hero-breakdown { flex-direction: column; gap: 16px; }
+  .bar-chart { height: 120px; }
+  .tab-btn { padding: 12px 12px; font-size: 12px; }
+  .summary-card { padding: 24px; }
+  .summary-grid { grid-template-columns: 1fr; }
+}
+
+/* ── VERSION TIMELINE ── */
+.version-timeline { padding: 12px 0; }
+.version-timeline-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.version-entry { display: flex; gap: 12px; padding: 8px 0; position: relative; }
+.version-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-green); margin-top: 6px; flex-shrink: 0; }
+.version-dot.latest { background: var(--accent-green); box-shadow: 0 0 8px rgba(99,212,170,0.4); }
+.version-dot.old { background: var(--text-muted); }
+.version-line { position: absolute; right: 4px; top: 20px; bottom: -8px; width: 2px; background: var(--border); }
+.version-entry:last-child .version-line { display: none; }
+.version-info { flex: 1; }
+.version-date { font-size: 12px; font-weight: 600; color: var(--accent-blue); }
+.version-source { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.version-values { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; margin-top: 4px; }
+.version-val-item { display: flex; flex-direction: column; gap: 1px; }
+.version-val-label { font-size: 10px; color: var(--text-muted); }
+.version-val-num { font-weight: 600; direction: ltr; text-align: right; font-size: 13px; }
+.version-delta { font-size: 11px; font-weight: 600; margin-right: 4px; }
+.version-delta.positive { color: var(--accent-green); }
+.version-delta.negative { color: var(--accent-rose); }
+.version-first-badge {
+  display: inline-block;
+  font-size: 10px;
+  background: var(--accent-green-dim);
+  color: var(--accent-green);
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div id="lockScreen" style="
+  position:fixed; inset:0; z-index:9999;
+  background: var(--bg-deep);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Heebo',sans-serif;
+">
+  <div style="
+    background:var(--bg-card); border:1px solid var(--border);
+    border-radius:var(--radius-xl); padding:48px; max-width:400px; width:90%;
+    text-align:center; box-shadow: var(--shadow-glow);
+  ">
+    <div style="
+      width:64px; height:64px; margin:0 auto 20px;
+      background:var(--gradient-hero); border-radius:16px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:28px; font-weight:800; color:var(--bg-deep);
+    ">₪</div>
+    <h1 style="font-size:24px; font-weight:700; color:var(--text-primary); margin-bottom:8px;">דשבורד פיננסי</h1>
+    <p style="font-size:14px; color:var(--text-muted); margin-bottom:28px;">הזן סיסמה כדי לגשת לדשבורד</p>
+    <input id="passInput" type="password" placeholder="סיסמה" autocomplete="off" style="
+      width:100%; padding:14px 18px; border-radius:12px;
+      background:var(--bg-elevated); border:1px solid var(--border);
+      color:var(--text-primary); font-size:16px; font-family:inherit;
+      text-align:center; outline:none; margin-bottom:16px;
+      transition: border-color 0.2s;
+    " onfocus="this.style.borderColor='var(--accent-green)'" onblur="this.style.borderColor='var(--border)'">
+    <button onclick="checkPass()" style="
+      width:100%; padding:14px; border-radius:12px;
+      background:var(--gradient-hero); border:none;
+      color:var(--bg-deep); font-size:16px; font-weight:700;
+      font-family:inherit; cursor:pointer;
+      transition: opacity 0.2s;
+    " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">כניסה</button>
+    <p id="passError" style="color:var(--accent-rose); font-size:13px; margin-top:12px; display:none;">סיסמה שגויה</p>
+  </div>
+</div>
+<script>
+// SHA-256 hash of the password "gil2025"
+const PASS_HASH = '25a790e938ecdd04805b071b75e2684d2f0697da915edb46010cc215bc84a174';
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+async function checkPass() {
+  const input = document.getElementById('passInput').value;
+  const hash = await sha256(input);
+  if (hash === PASS_HASH) {
+    document.getElementById('lockScreen').style.display = 'none';
+    sessionStorage.setItem('dashboard_auth','1');
+  } else {
+    document.getElementById('passError').style.display = 'block';
+    document.getElementById('passInput').style.borderColor = 'var(--accent-rose)';
+    setTimeout(() => { document.getElementById('passError').style.display = 'none'; }, 2000);
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('dashboard_auth') === '1') {
+    document.getElementById('lockScreen').style.display = 'none';
+  }
+  document.getElementById('passInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPass();
+  });
+});
+</script>
+
+<div class="app">
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <div class="header-logo">₪</div>
+    <div>
+      <div class="header-title">דשבורד פיננסי</div>
+      <div class="header-subtitle">תמונה מלאה · גיל קרן</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="header-date">עדכון אחרון: מרץ 2026</div>
+    <div class="header-user">גק</div>
+  </div>
+</header>
+
+<!-- TAB BAR -->
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('pension')" id="tabBtn-pension">
+    <span class="tab-icon">🏦</span> פנסיה וחסכונות
+  </button>
+  <button class="tab-btn" onclick="switchTab('insurance')" id="tabBtn-insurance">
+    <span class="tab-icon">🛡️</span> ביטוחים
+  </button>
+  <button class="tab-btn" onclick="switchTab('home')" id="tabBtn-home">
+    <span class="tab-icon">🏠</span> הוצאות בית
+  </button>
+  <button class="tab-btn" onclick="switchTab('clinic')" id="tabBtn-clinic">
+    <span class="tab-icon">🏥</span> הוצאות מרפאה
+  </button>
+</nav>
+
+<main class="main">
+
+<!-- ╔══════════════════════════════════════════════╗ -->
+<!-- ║          TAB 1: פנסיה וחסכונות                ║ -->
+<!-- ╚══════════════════════════════════════════════╝ -->
+<div class="tab-content active" id="tab-pension">
+
+<!-- HERO -->
+<section class="hero animate-in">
+  <div class="hero-total">
+    <div class="hero-label">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      סך כל הנכסים הפנסיוניים
+    </div>
+    <div class="hero-amount">₪1,458,271</div>
+    <div class="hero-amount-label">גיל קרן · ת.ז. 025614199 · נכון ל-23/03/2026</div>
+    <div class="hero-breakdown">
+      <div class="hero-breakdown-item">
+        <span class="hero-breakdown-label">קרן פנסיה</span>
+        <span class="hero-breakdown-value" style="color:var(--accent-green)">₪1,210,118</span>
+      </div>
+      <div class="hero-breakdown-item">
+        <span class="hero-breakdown-label">קרנות השתלמות</span>
+        <span class="hero-breakdown-value" style="color:var(--accent-blue)">₪242,630</span>
+      </div>
+      <div class="hero-breakdown-item">
+        <span class="hero-breakdown-label">ביטוח חיים (חיסכון)</span>
+        <span class="hero-breakdown-value" style="color:var(--accent-purple)">₪5,523</span>
+      </div>
+      <div class="hero-breakdown-item">
+        <span class="hero-breakdown-label">הפקדה חודשית</span>
+        <span class="hero-breakdown-value" style="color:var(--accent-amber)">₪6,477</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-chart-card animate-in delay-2">
+    <div class="hero-chart-title">התפלגות נכסים</div>
+    <div class="donut-container">
+      <svg class="donut-svg" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" stroke="rgba(255,255,255,0.04)" stroke-width="28"/>
+        <circle cx="100" cy="100" r="80" stroke="var(--accent-green)" stroke-width="28" stroke-dasharray="420.5 502.4" stroke-dashoffset="0" class="donut-segment"/>
+        <circle cx="100" cy="100" r="80" stroke="var(--accent-blue)" stroke-width="28" stroke-dasharray="80 502.4" stroke-dashoffset="-420.5" class="donut-segment"/>
+        <circle cx="100" cy="100" r="80" stroke="var(--accent-purple)" stroke-width="28" stroke-dasharray="1.9 502.4" stroke-dashoffset="-500.5" class="donut-segment"/>
+      </svg>
+      <div class="donut-center">
+        <div class="donut-center-value">₪1.46M</div>
+        <div class="donut-center-label">סה״כ</div>
+      </div>
+    </div>
+    <div class="donut-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:var(--accent-green)"></span><span class="legend-label">פנסיה</span><span class="legend-value">83.0%</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--accent-blue)"></span><span class="legend-label">השתלמות</span><span class="legend-value">16.6%</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--accent-purple)"></span><span class="legend-label">ביטוח חיים</span><span class="legend-value">0.4%</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PENSION -->
+<div class="section-header animate-in delay-1">
+  <div class="section-icon" style="background:var(--accent-green-dim); color:var(--accent-green)">🏦</div>
+  <h2 class="section-title">קרן פנסיה</h2>
+  <span class="section-badge" style="background:var(--accent-green-dim); color:var(--accent-green)">מנורה מבטחים</span>
+</div>
+<div class="cards-grid animate-in delay-2" style="grid-template-columns:1fr;">
+  <div class="card card-expandable" data-version-key="pension_menora" onclick="toggleCard(this)">
+    <span class="card-status status-active">פעיל</span>
+    <div class="card-provider">מנורה מבטחים פנסיה</div>
+    <div class="card-name">פנסיה חדשה מקיפה</div>
+    <div class="card-policy">פוליסה: 25614199 · מאז 10/2006 · מעסיק: המרכז לרפואה וטרינרית-ד"ר גיל קרן בע"מ</div>
+    <div class="track-badge track-green">מסלול השקעה: S&P 500 עוקב מדד 🇺🇸</div>
+    <span class="track-badge" style="background:rgba(251,191,36,0.1); border-color:rgba(251,191,36,0.2); color:var(--accent-amber);">מסלול ביטוח: 75% נכות / 100% שאירים</span>
+    <div style="display:flex; gap:40px; align-items:flex-end; flex-wrap:wrap; margin-top:8px;">
+      <div>
+        <div class="card-balance" style="color:var(--accent-green)">₪1,210,118</div>
+        <div class="card-balance-label">יתרה צבורה · נכון ל-23/03/2026</div>
+      </div>
+      <div style="display:flex; gap:24px; flex-wrap:wrap;">
+        <div><span class="metric-label" style="font-size:11px;">קצבה צפויה</span><div style="font-size:20px; font-weight:700; color:var(--accent-blue); direction:ltr; text-align:right;">₪10,843</div></div>
+        <div><span class="metric-label" style="font-size:11px;">הפקדה חודשית</span><div style="font-size:20px; font-weight:700; color:var(--accent-amber); direction:ltr; text-align:right;">₪4,582.60</div></div>
+        <div><span class="metric-label" style="font-size:11px;">שכר מבוטח</span><div style="font-size:20px; font-weight:700; direction:ltr; text-align:right;">₪22,023</div></div>
+      </div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
+        <div>
+          <div class="details-section-title">💰 הפקדות חודשיות</div>
+          <div class="card-metrics">
+            <div class="metric-row"><span class="metric-label">הפקדה — עובד (6%)</span><span class="metric-value">₪1,320</span></div>
+            <div class="metric-row"><span class="metric-label">הפקדה — מעסיק (6.5%)</span><span class="metric-value">₪1,430</span></div>
+            <div class="metric-row"><span class="metric-label">הפקדה — פיצויים (8.33%)</span><span class="metric-value">₪1,832.60</span></div>
+            <div class="metric-row"><span class="metric-label" style="font-weight:700; color:var(--text-primary)">סה״כ חודשי</span><span class="metric-value" style="color:var(--accent-green); font-weight:700;">₪4,582.60</span></div>
+          </div>
+          <div class="details-section-title" style="color:var(--accent-amber);">⚖️ דמי ניהול</div>
+          <div class="card-metrics">
+            <div class="metric-row"><span class="metric-label">דמי ניהול מהפקדות</span><span class="metric-value">1.60%</span></div>
+            <div class="metric-row"><span class="metric-label">דמי ניהול מצבירה (שנתי)</span><span class="metric-value">0.06%</span></div>
+            <div class="metric-row"><span class="metric-label">עלות שנתית צפויה כוללת</span><span class="metric-value">0.24%</span></div>
+            <div class="metric-row"><span class="metric-label">עלות שנתית משוערת (₪)</span><span class="metric-value">~₪1,645</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="details-section-title" style="color:var(--accent-blue);">📆 תחזית פרישה (גיל 67)</div>
+          <div class="card-metrics">
+            <div class="metric-row"><span class="metric-label">קצבה צפויה (עם המשך הפקדות)</span><span class="metric-value" style="color:var(--accent-blue); font-weight:700;">₪10,843/חודש</span></div>
+            <div class="metric-row"><span class="metric-label">קצבה צפויה (ללא המשך הפקדות)</span><span class="metric-value" style="color:var(--accent-amber);">₪7,215/חודש</span></div>
+            <div class="metric-row"><span class="metric-label">גיל פרישה</span><span class="metric-value">67</span></div>
+            <div class="metric-row"><span class="metric-label">שנים לפרישה</span><span class="metric-value">~21</span></div>
+          </div>
+          <div class="details-section-title" style="color:var(--accent-purple);">🛡️ כיסוי ביטוחי</div>
+          <div class="card-metrics">
+            <div class="metric-row"><span class="metric-label">פנסיית נכות (75%)</span><span class="metric-value" style="color:var(--accent-amber);">₪16,517/חודש</span></div>
+            <div class="metric-row"><span class="metric-label">עלות כיסוי נכות</span><span class="metric-value">₪600.35/חודש</span></div>
+            <div class="metric-row"><span class="metric-label">פנסיית שאירים — בן/בת זוג</span><span class="metric-value">₪13,214/חודש</span></div>
+            <div class="metric-row"><span class="metric-label">פנסיית שאירים — יתום</span><span class="metric-value">₪8,809/חודש</span></div>
+            <div class="metric-row"><span class="metric-label">עלות כיסוי שאירים</span><span class="metric-value">₪176.36/חודש</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="details-section-title" style="color:var(--accent-green);">📊 התפלגות צבירה</div>
+          <div class="card-metrics">
+            <div class="metric-row"><span class="metric-label">עמית (84.43%)</span><span class="metric-value">₪1,021,655</span></div>
+            <div class="metric-row"><span class="metric-label">מעסיק (5.99%)</span><span class="metric-value">₪72,501</span></div>
+            <div class="metric-row"><span class="metric-label">פיצויים (9.58%)</span><span class="metric-value">₪115,962</span></div>
+          </div>
+          <div class="details-section-title" style="color:var(--text-secondary);">📋 פרטים מנהליים</div>
+          <div class="card-metrics">
+            <div class="metric-row"><span class="metric-label">מעסיק</span><span class="metric-value">המרכז לרפואה וטרינרית-ד"ר גיל קרן בע"מ</span></div>
+            <div class="metric-row"><span class="metric-label">מספר קופה</span><span class="metric-value">168</span></div>
+            <div class="metric-row"><span class="metric-label">מספר פוליסה</span><span class="metric-value" style="direction:ltr">25614199</span></div>
+            <div class="metric-row"><span class="metric-label">תיק ניכויים</span><span class="metric-value" style="direction:ltr">936300342</span></div>
+            <div class="metric-row"><span class="metric-label">ח.פ חברה מנהלת</span><span class="metric-value" style="direction:ltr">512245812</span></div>
+            <div class="metric-row"><span class="metric-label">תאריך הצטרפות</span><span class="metric-value">01/10/2006</span></div>
+            <div class="metric-row"><span class="metric-label">מקור נתונים</span><span class="metric-value">אתר מנורה 23/03/2026</span></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפרטים מלאים</span><span class="hint-text-open">סגור פרטים</span> <span class="expand-arrow">▼</span></div>
+  </div>
+</div>
+
+<!-- HISHTALMUT -->
+<div class="section-header animate-in delay-1">
+  <div class="section-icon" style="background:var(--accent-blue-dim); color:var(--accent-blue)">📚</div>
+  <h2 class="section-title">קרנות השתלמות</h2>
+  <span class="section-badge" style="background:var(--accent-blue-dim); color:var(--accent-blue)">₪242,630</span>
+</div>
+<div class="cards-grid cards-2 animate-in delay-2">
+  <!-- Yalin Lapidot -->
+  <div class="card card-expandable" data-version-key="hishtalmut_yalin" onclick="toggleCard(this)">
+    <span class="card-status status-active">פעיל</span>
+    <div class="card-provider">ילין לפידות</div>
+    <div class="card-name">קרן השתלמות</div>
+    <div class="card-policy">70896526 · מאז 01/2019</div>
+    <div class="track-badge">מסלול כללי</div>
+    <div class="card-balance" style="color:var(--accent-blue)">₪209,441</div>
+    <div class="card-balance-label">ניתן למשיכה</div>
+    <div class="card-metrics">
+      <div class="metric-row"><span class="metric-label">תשואה 2025</span><span class="metric-value positive">+18.70%</span></div>
+      <div class="metric-row"><span class="metric-label">הפקדה חודשית</span><span class="metric-value">₪1,571.20</span></div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title">💰 הפקדות</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">הפקדה — עובד (2.5%)</span><span class="metric-value">₪392.80</span></div>
+        <div class="metric-row"><span class="metric-label">הפקדה — מעסיק (7.5%)</span><span class="metric-value">₪1,178.40</span></div>
+        <div class="metric-row"><span class="metric-label">שכר מדווח</span><span class="metric-value">₪15,712</span></div>
+        <div class="metric-row"><span class="metric-label">הפקדה אחרונה</span><span class="metric-value">11/2025</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--accent-amber);">⚖️ דמי ניהול</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">דמי ניהול מהפקדות</span><span class="metric-value" style="color:var(--accent-green)">0.00%</span></div>
+        <div class="metric-row"><span class="metric-label">דמי ניהול מצבירה (שנתי)</span><span class="metric-value">0.70%</span></div>
+        <div class="metric-row"><span class="metric-label">עלות שנתית משוערת</span><span class="metric-value">~₪1,466</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--text-secondary);">📋 פרטים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">מעסיק</span><span class="metric-value">המרכז לרפואה וטרינרית</span></div>
+        <div class="metric-row"><span class="metric-label">הצטרפות ראשונה</span><span class="metric-value">01/01/2019</span></div>
+        <div class="metric-row"><span class="metric-label">מספר אמ"ה</span><span class="metric-value">1038</span></div>
+        <div class="metric-row"><span class="metric-label">תיק ניכויים</span><span class="metric-value" style="direction:ltr">935811182</span></div>
+        <div class="metric-row"><span class="metric-label">ח.פ</span><span class="metric-value" style="direction:ltr">513611509</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפרטים מלאים</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <!-- Excellens Main -->
+  <div class="card card-expandable" data-version-key="hishtalmut_excellens" onclick="toggleCard(this)">
+    <span class="card-status status-inactive">לא פעיל</span>
+    <div class="card-provider">אקסלנס (הפניקס פנסיה וגמל)</div>
+    <div class="card-name">קרן השתלמות</div>
+    <div class="card-policy">7-237-451109-0</div>
+    <div class="track-badge">הפניקס השתלמות כללי</div>
+    <div class="card-balance" style="color:var(--accent-blue)">₪32,642</div>
+    <div class="card-balance-label">ניתן למשיכה</div>
+    <div class="card-metrics">
+      <div class="metric-row"><span class="metric-label">תשואה 2025</span><span class="metric-value positive">+13.67%</span></div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-amber);">⚖️ דמי ניהול</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">דמי ניהול מהפקדות</span><span class="metric-value" style="color:var(--accent-green)">0.00%</span></div>
+        <div class="metric-row"><span class="metric-label">דמי ניהול מצבירה (שנתי)</span><span class="metric-value">0.50%</span></div>
+        <div class="metric-row"><span class="metric-label">דמי ניהול שנגבו 2025</span><span class="metric-value">₪153</span></div>
+        <div class="metric-row"><span class="metric-label">רווחים 2025</span><span class="metric-value positive">+₪4,511</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--text-secondary);">📋 פרטים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">יתרה תחילת 2025</span><span class="metric-value">₪28,717</span></div>
+        <div class="metric-row"><span class="metric-label">הפקדה אחרונה</span><span class="metric-value">12/2016</span></div>
+        <div class="metric-row"><span class="metric-label">הצטרפות ראשונה</span><span class="metric-value">31/12/2007</span></div>
+        <div class="metric-row"><span class="metric-label">תיק ניכויים</span><span class="metric-value" style="direction:ltr">935825745</span></div>
+        <div class="metric-row"><span class="metric-label">מספר אמ"ה</span><span class="metric-value">399</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--accent-blue);">📚 קרנות קטנות נוספות באותו חשבון</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">7-237-451036-0 (פעיל, הפניקס כללי)</span><span class="metric-value">₪209</span></div>
+        <div class="metric-row"><span class="metric-label">7-237-451044-0 (פעיל, הפניקס כללי)</span><span class="metric-value">₪338</span></div>
+        <div class="metric-row"><span class="metric-label">תשואה 2025 (שתיהן)</span><span class="metric-value positive">+13.66%</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפרטים מלאים</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+</div>
+
+<!-- MONTHLY DEPOSITS BAR CHART -->
+<div class="section-header animate-in delay-1">
+  <div class="section-icon" style="background:var(--accent-amber-dim); color:var(--accent-amber)">📊</div>
+  <h2 class="section-title">הפקדות חודשיות 2025</h2>
+</div>
+<div class="bar-chart-container animate-in delay-2">
+  <div class="bar-chart-title">פירוט הפקדות לפי חודש (₪)</div>
+  <div class="bar-chart" id="barChart"></div>
+  <div class="bar-legend">
+    <div class="bar-legend-item"><div class="bar-legend-color" style="background:var(--accent-green)"></div>עובד — פנסיה</div>
+    <div class="bar-legend-item"><div class="bar-legend-color" style="background:#34d399"></div>מעסיק — פנסיה</div>
+    <div class="bar-legend-item"><div class="bar-legend-color" style="background:#065f46"></div>פיצויים</div>
+    <div class="bar-legend-item"><div class="bar-legend-color" style="background:var(--accent-blue)"></div>עובד — השתלמות</div>
+    <div class="bar-legend-item"><div class="bar-legend-color" style="background:#1e40af"></div>מעסיק — השתלמות</div>
+    <div class="bar-legend-item"><div class="bar-legend-color" style="background:var(--accent-rose)"></div>פרמיית ביטוח</div>
+  </div>
+</div>
+
+<!-- DEPOSITS TABLE -->
+<div class="table-container animate-in delay-3" id="depositsSection">
+  <div class="table-header-bar">
+    <h3 class="collapsible-trigger" onclick="toggleDeposits()" id="depositsTrigger">
+      <span class="chevron">◀</span>
+      פירוט הפקדות חודשיות — 12/2024 עד 10/2025
+    </h3>
+    <button class="table-toggle" onclick="toggleDeposits()">הצג/הסתר</button>
+  </div>
+  <div class="collapsible-content" id="depositsContent">
+    <div style="overflow-x:auto;">
+      <table>
+        <thead><tr>
+          <th>חודש</th><th class="num">עובד — פנסיה</th><th class="num">מעסיק — פנסיה</th><th class="num">פיצויים</th><th class="num">עובד — השתלמות</th><th class="num">מעסיק — השתלמות</th><th class="num">ביטוח (פרמיה)</th><th class="num">סה״כ</th>
+        </tr></thead>
+        <tbody id="depositsTableBody"></tbody>
+        <tfoot><tr>
+          <td><strong>סה״כ שנתי (11 חודשים)</strong></td>
+          <td class="num">₪14,520</td><td class="num">₪15,730</td><td class="num">₪20,158.60</td><td class="num">₪4,320.80</td><td class="num">₪12,962.40</td><td class="num">₪3,553</td>
+          <td class="num" style="color:var(--accent-green); font-size:15px;">₪71,244.80</td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- FEES COMPARISON -->
+<div class="section-header animate-in delay-1">
+  <div class="section-icon" style="background:var(--accent-purple-dim); color:var(--accent-purple)">⚖️</div>
+  <h2 class="section-title">השוואת דמי ניהול</h2>
+</div>
+<div class="fees-grid animate-in delay-2">
+  <div class="fee-card">
+    <div class="fee-card-name">מנורה — פנסיה חדשה מקיפה</div>
+    <div class="fee-card-type">קרן פנסיה · S&P 500 · צבירה ₪1,210,118</div>
+    <div class="fee-item"><span class="fee-item-label">דמי ניהול מהפקדות</span><span class="fee-item-value fee-warning">1.60%</span></div>
+    <div class="fee-item"><span class="fee-item-label">דמי ניהול מצבירה (שנתי)</span><span class="fee-item-value fee-highlight">0.06%</span></div>
+    <div class="fee-item"><span class="fee-item-label">עלות שנתית משוערת</span><span class="fee-item-value">~₪1,645</span></div>
+  </div>
+  <div class="fee-card">
+    <div class="fee-card-name">ילין לפידות — קרן השתלמות</div>
+    <div class="fee-card-type">קרן השתלמות · צבירה ₪209,441</div>
+    <div class="fee-item"><span class="fee-item-label">דמי ניהול מהפקדות</span><span class="fee-item-value fee-highlight">0.00%</span></div>
+    <div class="fee-item"><span class="fee-item-label">דמי ניהול מצבירה (שנתי)</span><span class="fee-item-value fee-warning">0.70%</span></div>
+    <div class="fee-item"><span class="fee-item-label">עלות שנתית משוערת</span><span class="fee-item-value">~₪1,466</span></div>
+  </div>
+  <div class="fee-card">
+    <div class="fee-card-name">אקסלנס — קרנות השתלמות (3)</div>
+    <div class="fee-card-type">קרן השתלמות · צבירה ₪33,189</div>
+    <div class="fee-item"><span class="fee-item-label">דמי ניהול מהפקדות</span><span class="fee-item-value fee-highlight">0.00%</span></div>
+    <div class="fee-item"><span class="fee-item-label">דמי ניהול מצבירה (שנתי)</span><span class="fee-item-value">0.50%</span></div>
+    <div class="fee-item"><span class="fee-item-label">עלות שנתית משוערת</span><span class="fee-item-value">~₪166</span></div>
+  </div>
+  <div class="fee-card">
+    <div class="fee-card-name">הפניקס — מסלול (מסולקת)</div>
+    <div class="fee-card-type">ביטוח חיים + חיסכון · צבירה ₪5,523</div>
+    <div class="fee-item"><span class="fee-item-label">דמי ניהול מהפקדות</span><span class="fee-item-value fee-highlight">0.00%</span></div>
+    <div class="fee-item"><span class="fee-item-label">דמי ניהול מצבירה (שנתי)</span><span class="fee-item-value fee-warning">1.00%</span></div>
+    <div class="fee-item"><span class="fee-item-label">עלות שנתית</span><span class="fee-item-value">~₪51</span></div>
+  </div>
+  <div class="fee-card">
+    <div class="fee-card-name">הפניקס — ריסק 1</div>
+    <div class="fee-card-type">ביטוח סיכון טהור · ללא חיסכון</div>
+    <div class="fee-item"><span class="fee-item-label">פרמיה שנתית</span><span class="fee-item-value">₪3,878</span></div>
+    <div class="fee-item"><span class="fee-item-label">פרמיה חודשית</span><span class="fee-item-value">~₪323</span></div>
+  </div>
+</div>
+
+</div><!-- /tab-pension -->
+
+
+<!-- ╔══════════════════════════════════════════════╗ -->
+<!-- ║          TAB 2: ביטוחים                       ║ -->
+<!-- ╚══════════════════════════════════════════════╝ -->
+<div class="tab-content" id="tab-insurance">
+
+<!-- Insurance Summary -->
+<div class="summary-card animate-in">
+  <div style="font-size:18px; font-weight:700; margin-bottom:20px;">סיכום ביטוחים שנתי</div>
+  <div class="summary-grid">
+    <div class="summary-item">
+      <div class="summary-item-icon">🚗</div>
+      <div class="summary-item-value" style="color:var(--accent-blue)">₪6,124</div>
+      <div class="summary-item-label">ביטוח רכב (IDI)</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-item-icon">🏥</div>
+      <div class="summary-item-value" style="color:#34d399">₪2,754</div>
+      <div class="summary-item-label">ביטוח בריאות (הראל)</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-item-icon">🛡️</div>
+      <div class="summary-item-value" style="color:var(--accent-rose)">₪3,878</div>
+      <div class="summary-item-label">ביטוח חיים (הפניקס)</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-item-icon">💰</div>
+      <div class="summary-item-value" style="color:var(--accent-amber)">₪12,756</div>
+      <div class="summary-item-label">סה"כ שנתי (~₪1,063/חודש)</div>
+    </div>
+  </div>
+</div>
+
+<!-- CAR INSURANCE -->
+<div class="section-header animate-in delay-1">
+  <div class="section-icon" style="background:rgba(96,165,250,0.15); color:var(--accent-blue)">🚗</div>
+  <h2 class="section-title">ביטוח רכב</h2>
+  <span class="section-badge" style="background:rgba(96,165,250,0.15); color:var(--accent-blue)">IDI · ₪6,124/שנה</span>
+</div>
+<div class="cards-grid animate-in delay-2" style="grid-template-columns:1fr;">
+  <div class="card card-expandable" data-version-key="insurance_car_idi" onclick="toggleCard(this)">
+    <span class="card-status status-active">פעיל</span>
+    <div class="card-provider">איי. די. איי. (IDI) חברה לביטוח</div>
+    <div class="card-name">ביטוח רכב — חובה + מקיף + גרירה</div>
+    <div class="card-policy">פוליסה: 1882868700 · 15/09/2025 עד 31/08/2026 · נהג נקוב</div>
+    <div style="display:flex; gap:24px; flex-wrap:wrap; margin-top:12px;">
+      <div><span class="metric-label" style="font-size:11px;">פרמיה שנתית כוללת</span><div style="font-size:24px; font-weight:700; color:var(--accent-blue); direction:ltr; text-align:right;">₪6,124</div></div>
+      <div><span class="metric-label" style="font-size:11px;">~חודשי</span><div style="font-size:24px; font-weight:700; direction:ltr; text-align:right;">₪510</div></div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-blue);">📋 פירוט כיסויים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">רכב חובה</span><span class="metric-value">₪1,383/שנה</span></div>
+        <div class="metric-row"><span class="metric-label">ביטוח מקיף (נהג נקוב)</span><span class="metric-value">₪4,519/שנה</span></div>
+        <div class="metric-row"><span class="metric-label">שירותי רכב וגרירה מורחב</span><span class="metric-value">₪222/שנה</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--text-secondary);">📋 פרטים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סיווג</span><span class="metric-value">אישי</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">15/09/2025 — 31/08/2026</span></div>
+        <div class="metric-row"><span class="metric-label">מקור</span><span class="metric-value">הר הביטוח — 24/03/2026</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפרטים</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+</div>
+
+<!-- HEALTH INSURANCE -->
+<div class="section-header animate-in delay-1">
+  <div class="section-icon" style="background:rgba(52,211,153,0.15); color:#34d399">🏥</div>
+  <h2 class="section-title">ביטוח בריאות</h2>
+  <span class="section-badge" style="background:rgba(52,211,153,0.15); color:#34d399">הראל · ₪229.54/חודש</span>
+</div>
+<div class="cards-grid animate-in delay-2" style="grid-template-columns:1fr;">
+  <div class="card card-expandable" data-version-key="insurance_health_harel" onclick="toggleCard(this)">
+    <span class="card-status status-active">פעיל</span>
+    <div class="card-provider">הראל חברה לביטוח</div>
+    <div class="card-name">ביטוח בריאות קבוצתי — 8 כיסויים</div>
+    <div class="card-policy">פוליסה: 508642986 · 01/02/2026 עד 01/02/2029 · קבוצתי</div>
+    <div style="display:flex; gap:24px; flex-wrap:wrap; margin-top:12px;">
+      <div><span class="metric-label" style="font-size:11px;">פרמיה חודשית כוללת</span><div style="font-size:24px; font-weight:700; color:#34d399; direction:ltr; text-align:right;">₪229.54</div></div>
+      <div><span class="metric-label" style="font-size:11px;">~שנתי</span><div style="font-size:24px; font-weight:700; direction:ltr; text-align:right;">₪2,754</div></div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:#34d399;">📋 פירוט כיסויים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">ניתוחים (אחידה)</span><span class="metric-value">₪96.65/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">ייעוץ ובדיקות</span><span class="metric-value">₪72.41/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">תרופות מחוץ לסל (אחידה)</span><span class="metric-value">₪50.14/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">השתלות (אחידה)</span><span class="metric-value">₪8.09/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">ניתוחים בחו"ל (אחידה)</span><span class="metric-value">₪2.25/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">טיפולים וטכנולוגיות מתקדמות</span><span class="metric-value">₪0/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">ליווי וטיפולים אגב אירוע רפואי</span><span class="metric-value">₪0/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">אמבולטורי אחר</span><span class="metric-value">₪0/חודש</span></div>
+        <hr class="card-divider">
+        <div class="metric-row"><span class="metric-label" style="font-weight:700; color:var(--text-primary)">סה"כ חודשי</span><span class="metric-value" style="font-weight:700; color:#34d399;">₪229.54</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--text-secondary);">📋 פרטים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סיווג</span><span class="metric-value">קבוצתי</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">01/02/2026 — 01/02/2029</span></div>
+        <div class="metric-row"><span class="metric-label">מקור</span><span class="metric-value">הר הביטוח — 24/03/2026</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפרטים מלאים</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+</div>
+
+<!-- LIFE INSURANCE -->
+<div class="section-header animate-in delay-1">
+  <div class="section-icon" style="background:var(--accent-rose-dim); color:var(--accent-rose)">🛡️</div>
+  <h2 class="section-title">ביטוח חיים ואבדן כושר עבודה</h2>
+  <span class="section-badge" style="background:var(--accent-rose-dim); color:var(--accent-rose)">הפניקס + מנורה · ₪330/חודש</span>
+</div>
+<div class="cards-grid cards-3 animate-in delay-2">
+  <!-- Risk Policy -->
+  <div class="card card-expandable" data-version-key="insurance_risk_phoenix" onclick="toggleCard(this)">
+    <span class="card-status status-active">פעיל</span>
+    <div class="card-provider">הפניקס</div>
+    <div class="card-name">ריסק 1 — ביטוח סיכון טהור</div>
+    <div class="card-policy">8052812016 · 06/2014 עד 06/2049</div>
+    <div class="insurance-coverage">
+      <div class="coverage-item"><div class="coverage-icon">💀</div><div class="coverage-label">ביטוח מוות</div><div class="coverage-value" style="color:var(--accent-rose)">₪354,501</div></div>
+      <div class="coverage-item"><div class="coverage-icon">🩺</div><div class="coverage-label">אכ"ע חודשי</div><div class="coverage-value" style="color:var(--accent-amber)">₪5,908</div></div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-rose);">🛡️ כיסויים מלאים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">ביטוח יסודי (ריסק מוות)</span><span class="metric-value" style="color:var(--accent-rose)">₪354,501</span></div>
+        <div class="metric-row"><span class="metric-label">פיצוי קבוע רופא (אכ"ע)</span><span class="metric-value">₪5,908/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">מוות מתאונה</span><span class="metric-value" style="color:var(--accent-rose)">₪1,543,404</span></div>
+        <div class="metric-row"><span class="metric-label">שחרור קבוע רופא</span><span class="metric-value">כלול</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--text-secondary);">📝 נספחים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">הרחבה עיסוקית צווארון לבן</span><span class="metric-value positive">✓</span></div>
+        <div class="metric-row"><span class="metric-label">ביטול החרגה לתאונות עבודה</span><span class="metric-value positive">✓</span></div>
+        <div class="metric-row"><span class="metric-label">נכות חלקית משופר</span><span class="metric-value positive">✓</span></div>
+        <div class="metric-row"><span class="metric-label">הגדלת פיצוי — שיקום וסיעוד</span><span class="metric-value positive">✓</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--accent-amber);">💳 פרמיות</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">ביטוח חיים למקרה מוות</span><span class="metric-value">₪118.96/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">אכ"ע שחרור ופיצוי</span><span class="metric-value">₪121.31/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">מוות מתאונה (2014)</span><span class="metric-value">₪16.48/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">מוות מתאונה (2017)</span><span class="metric-value">₪69.13/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">אכ"ע שחרור בלבד</span><span class="metric-value">₪4.22/חודש</span></div>
+        <hr class="card-divider">
+        <div class="metric-row"><span class="metric-label" style="font-weight:700; color:var(--text-primary)">סה"כ חודשי</span><span class="metric-value" style="font-weight:700;">₪330.10</span></div>
+        <div class="metric-row"><span class="metric-label" style="font-weight:700; color:var(--text-primary)">סה"כ שנתי</span><span class="metric-value" style="font-weight:700;">₪3,878</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--text-secondary);">📋 פרטים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">בעל הפוליסה</span><span class="metric-value">קרן גיל</span></div>
+        <div class="metric-row"><span class="metric-label">סוכן</span><span class="metric-value">לדרברג שוק שיאים בע"מ</span></div>
+        <div class="metric-row"><span class="metric-label">תיק ניכויים</span><span class="metric-value" style="direction:ltr">930638713</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפרטים מלאים</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <!-- Maslul Savings -->
+  <div class="card card-expandable" data-version-key="insurance_maslul_phoenix" onclick="toggleCard(this)">
+    <span class="card-status status-settled">מסולקת</span>
+    <div class="card-provider">הפניקס</div>
+    <div class="card-name">מסלול — ביטוח חיים + חיסכון</div>
+    <div class="card-policy">1925587014 · מאז 01/2006</div>
+    <div class="track-badge track-purple">הפניקס כללי</div>
+    <div class="card-balance" style="color:var(--accent-purple)">₪5,523</div>
+    <div class="card-balance-label">יתרה צבורה</div>
+    <div class="card-metrics">
+      <div class="metric-row"><span class="metric-label">תשואה 2025</span><span class="metric-value positive">+14.85%</span></div>
+      <div class="metric-row"><span class="metric-label">קצבה צפויה בגיל 70</span><span class="metric-value">₪49/חודש</span></div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title">📊 תנועות 2025</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">יתרה תחילת שנה</span><span class="metric-value">₪4,858</span></div>
+        <div class="metric-row"><span class="metric-label">הפקדות</span><span class="metric-value">₪0</span></div>
+        <div class="metric-row"><span class="metric-label">רווחים (ניכוי הוצאות השקעה)</span><span class="metric-value positive">+₪716</span></div>
+        <div class="metric-row"><span class="metric-label">דמי ניהול שנגבו</span><span class="metric-value negative">-₪51</span></div>
+        <div class="metric-row"><span class="metric-label" style="font-weight:700;">יתרה סוף שנה</span><span class="metric-value" style="font-weight:700;">₪5,523</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--accent-amber);">⚖️ דמי ניהול</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">דמי ניהול מהפקדה</span><span class="metric-value">0.00%</span></div>
+        <div class="metric-row"><span class="metric-label">דמי ניהול מצבירה</span><span class="metric-value">1.00%</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע בתכנית — מהפקדה</span><span class="metric-value">4.16%</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע בתכנית — מצבירה</span><span class="metric-value">0.96%</span></div>
+        <div class="metric-row"><span class="metric-label">הוצאות ניהול השקעות</span><span class="metric-value">0.17%</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--text-secondary);">📋 פרטים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">תשואה מצטברת 5 שנים</span><span class="metric-value positive">+53.17%</span></div>
+        <div class="metric-row"><span class="metric-label">מקדם קצבה מובטח</span><span class="metric-value">190.66</span></div>
+        <div class="metric-row"><span class="metric-label">קרן חיסכון צמודה</span><span class="metric-value">₪3,309</span></div>
+        <div class="metric-row"><span class="metric-label">רווחים ראליים</span><span class="metric-value">₪2,214</span></div>
+        <div class="metric-row"><span class="metric-label">סוכן</span><span class="metric-value">בלוך אורי</span></div>
+        <div class="metric-row"><span class="metric-label">סכום חד-פעמי במוות</span><span class="metric-value">₪5,523</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפרטים מלאים</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <!-- Menora Risk -->
+  <div class="card card-expandable" data-version-key="insurance_menora_akw" onclick="toggleCard(this)">
+    <span class="card-status status-active">פעיל</span>
+    <div class="card-provider">מנורה מבטחים ביטוח</div>
+    <div class="card-name">אכ"ע מטריה פרט (פנסיה)</div>
+    <div class="card-policy">15663610 · מאז 08/2006</div>
+    <div class="insurance-coverage" style="grid-template-columns: 1fr;">
+      <div class="coverage-item"><div class="coverage-icon">🩺</div><div class="coverage-label">סוג כיסוי</div><div class="coverage-value" style="color:var(--accent-amber)">אובדן כושר עבודה</div></div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג מוצר</span><span class="metric-value">פוליסת סיכון טהור (ריסק/אכ"ע)</span></div>
+        <div class="metric-row"><span class="metric-label">פרמיה</span><span class="metric-value" style="color:var(--accent-green)">₪0</span></div>
+        <div class="metric-row"><span class="metric-label">תום כיסוי ביטוחי</span><span class="metric-value">01/08/2038</span></div>
+        <div class="metric-row"><span class="metric-label">תחילת תכנית</span><span class="metric-value">01/08/2006</span></div>
+        <div class="metric-row"><span class="metric-label">תיק ניכויים</span><span class="metric-value" style="direction:ltr">935507640</span></div>
+        <div class="metric-row"><span class="metric-label">ח.פ</span><span class="metric-value" style="direction:ltr">520042540</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפרטים</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+</div>
+
+</div><!-- /tab-insurance -->
+
+
+<!-- ╔══════════════════════════════════════════════╗ -->
+<!-- ║          TAB 3: הוצאות בית                    ║ -->
+<!-- ╚══════════════════════════════════════════════╝ -->
+<div class="tab-content" id="tab-home">
+
+<!-- Home Expenses Summary -->
+<div class="summary-card animate-in">
+  <div style="font-size:18px; font-weight:700; margin-bottom:20px;">סיכום הוצאות בית חודשיות</div>
+  <div class="summary-grid">
+    <div class="summary-item">
+      <div class="summary-item-icon">📌</div>
+      <div class="summary-item-value" style="color:var(--accent-rose)">₪8,003</div>
+      <div class="summary-item-label">הוצאות קבועות / חודש</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-item-icon">🔄</div>
+      <div class="summary-item-value" style="color:var(--accent-blue)">~₪12,099</div>
+      <div class="summary-item-label">הוצאות משתנות / חודש</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-item-icon">💳</div>
+      <div class="summary-item-value" style="color:var(--accent-amber)">~₪20,102</div>
+      <div class="summary-item-label">סה"כ הוצאות / חודש</div>
+    </div>
+  </div>
+</div>
+
+<!-- Fixed Expenses -->
+<div class="cards-grid cards-2 animate-in delay-2">
+  <div class="card card-expandable" data-version-key="home_fixed" onclick="toggleCard(this)" style="border-top: 3px solid var(--accent-rose);">
+    <div class="card-name" style="font-size:18px;">📌 הוצאות קבועות</div>
+    <div class="card-balance" style="color:var(--accent-rose)">₪8,003</div>
+    <div class="card-balance-label">סה"כ חודשי (כרטיסים + בנק)</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-rose);">🏠 דיור</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">ארנונה (עיריית ת"א)</span><span class="metric-value">₪2,844</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--accent-blue);">🎓 חינוך</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">הכפר הירוק (×2)</span><span class="metric-value">₪2,940</span></div>
+        <div class="metric-row"><span class="metric-label">עמותת הורי בי"ס</span><span class="metric-value">₪1,005</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--accent-green);">🏃 ספורט</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">MOVE (חדר כושר)</span><span class="metric-value">₪480</span></div>
+        <div class="metric-row"><span class="metric-label">אונה דאנס אקדמי</span><span class="metric-value">₪320</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--accent-purple);">🏥 בריאות</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">קופ"ח מאוחדת</span><span class="metric-value">₪203</span></div>
+        <div class="metric-row"><span class="metric-label">סעוד הראל</span><span class="metric-value">₪142</span></div>
+        <div class="metric-row"><span class="metric-label">שירותי בריאות</span><span class="metric-value">₪94</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--text-secondary);">🚌 תחבורה ואחר</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סיטי צפריר (דלק/חניה)</span><span class="metric-value">₪164</span></div>
+        <div class="metric-row"><span class="metric-label">רב-פס</span><span class="metric-value">₪75</span></div>
+        <div class="metric-row"><span class="metric-label">עמלות בנק + דמי כרטיס</span><span class="metric-value">₪55</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <!-- Variable Expenses -->
+  <div class="card card-expandable" data-version-key="home_variable" onclick="toggleCard(this)" style="border-top: 3px solid var(--accent-blue);">
+    <div class="card-name" style="font-size:18px;">🔄 הוצאות משתנות</div>
+    <div class="card-balance" style="color:var(--accent-blue)">₪12,099</div>
+    <div class="card-balance-label">ממוצע חודשי (ינואר-פברואר)</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-green);">🛒 מזון וסופרים — ₪2,605/חודש</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">ינואר</span><span class="metric-value">₪2,866</span></div>
+        <div class="metric-row"><span class="metric-label">פברואר</span><span class="metric-value">₪2,344</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--accent-amber);">☕ קפה ומסעדות — ₪2,401/חודש</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">ינואר</span><span class="metric-value">₪2,811</span></div>
+        <div class="metric-row"><span class="metric-label">פברואר</span><span class="metric-value">₪1,990</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--accent-purple);">👔 ביגוד ואופנה — ₪1,296/חודש</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">ינואר</span><span class="metric-value">₪2,591</span></div>
+        <div class="metric-row"><span class="metric-label">פברואר</span><span class="metric-value">₪0</span></div>
+      </div>
+      <div class="details-section-title" style="color:var(--text-secondary);">📦 אחר — ₪5,678/חודש</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">ינואר</span><span class="metric-value">₪4,125</span></div>
+        <div class="metric-row"><span class="metric-label">פברואר</span><span class="metric-value">₪7,231</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+</div>
+
+</div><!-- /tab-home -->
+
+
+<!-- ╔══════════════════════════════════════════════╗ -->
+<!-- ║          TAB 4: הוצאות מרפאה                  ║ -->
+<!-- ╚══════════════════════════════════════════════╝ -->
+<div class="tab-content" id="tab-clinic">
+
+<!-- Clinic Summary -->
+<div class="summary-card animate-in">
+  <div style="font-size:18px; font-weight:700; margin-bottom:4px;">פט קייר — סיכום הוצאות מרפאה</div>
+  <div style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">תקופה: ספטמבר 2025 — מרץ 2026 (6 חודשים)</div>
+  <div class="summary-grid">
+    <div class="summary-item">
+      <div class="summary-item-icon">💳</div>
+      <div class="summary-item-value" style="color:var(--accent-rose)">~₪163K</div>
+      <div class="summary-item-label">ממוצע חודשי (כ. אשראי)</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-item-icon">🏦</div>
+      <div class="summary-item-value" style="color:var(--accent-blue)">~₪260K</div>
+      <div class="summary-item-label">ממוצע חודשי (בנק)</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-item-icon">👥</div>
+      <div class="summary-item-value" style="color:var(--accent-amber)">~₪112.5K</div>
+      <div class="summary-item-label">שכר וכוח אדם / חודש</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-item-icon">💰</div>
+      <div class="summary-item-value" style="color:var(--accent-green)">~₪16.6K</div>
+      <div class="summary-item-label">הוצאות קבועות / חודש</div>
+    </div>
+  </div>
+</div>
+
+<!-- FIXED EXPENSES -->
+<div class="section-header animate-in delay-1">
+  <div class="section-icon" style="background:var(--accent-green-dim); color:var(--accent-green)">📌</div>
+  <h2 class="section-title">הוצאות קבועות — מרפאה</h2>
+</div>
+
+<div class="cards-grid cards-2 animate-in delay-2">
+  <!-- Rent & Maintenance -->
+  <div class="card card-expandable" onclick="toggleCard(this)" style="border-top: 3px solid var(--accent-amber);">
+    <div class="cat-header">🏠 שכירות ואחזקה</div>
+    <div class="cat-total">₪12,785 / חודש</div>
+    <div class="card-metrics">
+      <div class="metric-row"><span class="metric-label">שכירות מרפאה (ישראל סוויט)</span><span class="metric-value">₪2,400 <span style="font-size:10px;color:var(--text-muted)">הו"ק</span></span></div>
+      <div class="metric-row"><span class="metric-label">שכירות (איילה זיו)</span><span class="metric-value">₪3,800 <span style="font-size:10px;color:var(--text-muted)">הו"ק</span></span></div>
+      <div class="metric-row"><span class="metric-label">ועד בית</span><span class="metric-value">₪1,100 <span style="font-size:10px;color:var(--text-muted)">הו"ק</span></span></div>
+      <div class="metric-row"><span class="metric-label">ניהול (שחר טרחה)</span><span class="metric-value">₪2,360 <span style="font-size:10px;color:var(--text-muted)">הו"ק</span></span></div>
+      <div class="metric-row"><span class="metric-label">מרימי ישראלי</span><span class="metric-value">₪2,625 <span style="font-size:10px;color:var(--text-muted)">הו"ק</span></span></div>
+      <div class="metric-row"><span class="metric-label">אחזקה ותיקונים</span><span class="metric-value">~₪500 <span style="font-size:10px;color:var(--text-muted)">משתנה</span></span></div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--text-secondary);">📋 סיווג תשלומים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">שכירות (ישראל סוויט) — הו"ק</span><span class="metric-value">₪2,400/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">שכירות (איילה זיו) — הו"ק</span><span class="metric-value">₪3,800/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">ועד בית — הו"ק</span><span class="metric-value">₪1,100/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">ניהול (שחר טרחה) — הו"ק</span><span class="metric-value">₪2,360/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">מרימי ישראלי — הו"ק</span><span class="metric-value">₪2,625/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">אחזקה ותיקונים — משתנה</span><span class="metric-value">~₪500/חודש</span></div>
+        <hr class="card-divider">
+        <div class="metric-row"><span class="metric-label" style="font-weight:700; color:var(--text-primary)">סה"כ קטגוריה</span><span class="metric-value" style="font-weight:700; color:var(--accent-amber)">₪12,785/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">% מסה"כ קבועות</span><span class="metric-value">77%</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <!-- Infrastructure -->
+  <div class="card card-expandable" onclick="toggleCard(this)" style="border-top: 3px solid var(--accent-blue);">
+    <div class="cat-header">⚡ תשתיות ותקשורת</div>
+    <div class="cat-total">₪1,623 / חודש</div>
+    <div class="card-metrics">
+      <div class="metric-row"><span class="metric-label">חברת חשמל</span><span class="metric-value">~₪435</span></div>
+      <div class="metric-row"><span class="metric-label">מי בת-ים</span><span class="metric-value">₪326</span></div>
+      <div class="metric-row"><span class="metric-label">בזק</span><span class="metric-value">~₪545</span></div>
+      <div class="metric-row"><span class="metric-label">סלקום</span><span class="metric-value">~₪273</span></div>
+      <div class="metric-row"><span class="metric-label">שורק עסקי</span><span class="metric-value">~₪44</span></div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--text-secondary);">📋 סיווג תשלומים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">חברת חשמל — הו"ק</span><span class="metric-value">~₪435/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">מי בת-ים — הו"ק</span><span class="metric-value">₪326/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">בזק — הו"ק</span><span class="metric-value">~₪545/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">סלקום — כ.אשראי</span><span class="metric-value">~₪273/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">שורק עסקי — כ.אשראי</span><span class="metric-value">~₪44/חודש</span></div>
+        <hr class="card-divider">
+        <div class="metric-row"><span class="metric-label" style="font-weight:700; color:var(--text-primary)">סה"כ קטגוריה</span><span class="metric-value" style="font-weight:700; color:var(--accent-blue)">₪1,623/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">% מסה"כ קבועות</span><span class="metric-value">10%</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <!-- Security & Management -->
+  <div class="card card-expandable" onclick="toggleCard(this)" style="border-top: 3px solid var(--accent-purple);">
+    <div class="cat-header">🔐 אבטחה וניהול</div>
+    <div class="cat-total">₪1,658 / חודש</div>
+    <div class="card-metrics">
+      <div class="metric-row"><span class="metric-label">מערכת מיגון (צוות 3)</span><span class="metric-value">₪201</span></div>
+      <div class="metric-row"><span class="metric-label">תוכנת ניהול (מיכפל)</span><span class="metric-value">₪196</span></div>
+      <div class="metric-row"><span class="metric-label">VOXIA</span><span class="metric-value">₪177</span></div>
+      <div class="metric-row"><span class="metric-label">דנגוט מחשבים</span><span class="metric-value">₪28</span></div>
+      <div class="metric-row"><span class="metric-label">Wellybox</span><span class="metric-value">~₪676</span></div>
+      <div class="metric-row"><span class="metric-label">קליניקה אייר</span><span class="metric-value">~₪380</span></div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--text-secondary);">📋 סיווג תשלומים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">מערכת מיגון (צוות 3) — הו"ק</span><span class="metric-value">₪201/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">תוכנת ניהול (מיכפל) — כ.אשראי</span><span class="metric-value">₪196/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">VOXIA — כ.אשראי</span><span class="metric-value">₪177/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">דנגוט מחשבים — כ.אשראי</span><span class="metric-value">₪28/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">Wellybox — כ.אשראי</span><span class="metric-value">~₪676/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">קליניקה אייר — כ.אשראי</span><span class="metric-value">~₪380/חודש</span></div>
+        <hr class="card-divider">
+        <div class="metric-row"><span class="metric-label" style="font-weight:700; color:var(--text-primary)">סה"כ קטגוריה</span><span class="metric-value" style="font-weight:700; color:var(--accent-purple)">₪1,658/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">% מסה"כ קבועות</span><span class="metric-value">10%</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <!-- Digital Subscriptions -->
+  <div class="card card-expandable" onclick="toggleCard(this)" style="border-top: 3px solid var(--accent-rose);">
+    <div class="cat-header">💻 מנויים דיגיטליים</div>
+    <div class="cat-total">~₪582 / חודש (+ Google Ads ~₪3,578)</div>
+    <div class="card-metrics">
+      <div class="metric-row"><span class="metric-label">Netflix</span><span class="metric-value">₪70</span></div>
+      <div class="metric-row"><span class="metric-label">Spotify</span><span class="metric-value">₪44</span></div>
+      <div class="metric-row"><span class="metric-label">Google One</span><span class="metric-value">~₪550</span></div>
+      <div class="metric-row"><span class="metric-label">הארץ</span><span class="metric-value">₪150</span></div>
+      <div class="metric-row"><span class="metric-label">Claude AI</span><span class="metric-value">~₪159</span></div>
+      <div class="metric-row"><span class="metric-label">Lovable</span><span class="metric-value">~₪238</span></div>
+      <hr class="card-divider">
+      <div class="metric-row"><span class="metric-label" style="color:var(--accent-amber)">Google Ads (פרסום)</span><span class="metric-value" style="color:var(--accent-amber)">~₪3,578</span></div>
+    </div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--text-secondary);">📋 סיווג תשלומים</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">Netflix — כ.אשראי</span><span class="metric-value">₪70/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">Spotify — כ.אשראי</span><span class="metric-value">₪44/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">Google One — כ.אשראי</span><span class="metric-value">~₪550/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">הארץ — כ.אשראי</span><span class="metric-value">₪150/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">Claude AI — כ.אשראי</span><span class="metric-value">~₪159/חודש</span></div>
+        <div class="metric-row"><span class="metric-label">Lovable — כ.אשראי</span><span class="metric-value">~₪238/חודש</span></div>
+        <hr class="card-divider">
+        <div class="metric-row"><span class="metric-label" style="font-weight:700; color:var(--text-primary)">סה"כ מנויים</span><span class="metric-value" style="font-weight:700; color:var(--accent-rose)">~₪1,211/חודש</span></div>
+        <div class="metric-row"><span class="metric-label" style="font-weight:700; color:var(--accent-amber)">+ Google Ads</span><span class="metric-value" style="font-weight:700; color:var(--accent-amber)">~₪3,578/חודש</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+</div>
+
+<!-- VARIABLE EXPENSES (CC) -->
+<div class="section-header animate-in delay-1">
+  <div class="section-icon" style="background:var(--accent-rose-dim); color:var(--accent-rose)">💳</div>
+  <h2 class="section-title">הוצאות משתנות — כרטיסי אשראי</h2>
+  <span class="section-badge" style="background:var(--accent-rose-dim); color:var(--accent-rose)">ספט 2025 — מרץ 2026</span>
+</div>
+
+<div class="cards-grid cards-2 animate-in delay-2">
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header" style="color:var(--accent-rose)">🏥 ספקים וטרינריים</div>
+    <div class="card-balance" style="font-size:24px; color:var(--accent-rose)">₪815,389</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪136K/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-rose);">📊 פירוט</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">כרטיס אשראי</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value" style="color:var(--accent-rose)">~₪135,898</span></div>
+        <div class="metric-row"><span class="metric-label">מספר עסקאות (6 חודשים)</span><span class="metric-value">~120</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+        <div class="metric-row"><span class="metric-label">% מהוצאות כ.אשראי</span><span class="metric-value">76%</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header" style="color:var(--accent-amber)">📋 מסים</div>
+    <div class="card-balance" style="font-size:24px; color:var(--accent-amber)">₪161,036</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪27K/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-amber);">📊 פירוט</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">כרטיס אשראי</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value" style="color:var(--accent-amber)">~₪26,839</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+        <div class="metric-row"><span class="metric-label">% מהוצאות כ.אשראי</span><span class="metric-value">15%</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header" style="color:var(--accent-blue)">📡 תקשורת וטכנולוגיה</div>
+    <div class="card-balance" style="font-size:24px; color:var(--accent-blue)">₪35,124</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪5.9K/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-blue);">📊 פירוט</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">כרטיס אשראי</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value" style="color:var(--accent-blue)">~₪5,854</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+        <div class="metric-row"><span class="metric-label">% מהוצאות כ.אשראי</span><span class="metric-value">3.3%</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header" style="color:var(--accent-green)">🐾 ספקי מזון לחיות</div>
+    <div class="card-balance" style="font-size:24px; color:var(--accent-green)">₪17,210</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪2.9K/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-green);">📊 פירוט</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">כרטיס אשראי</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value" style="color:var(--accent-green)">~₪2,868</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+        <div class="metric-row"><span class="metric-label">% מהוצאות כ.אשראי</span><span class="metric-value">1.6%</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header" style="color:var(--accent-purple)">🍽️ מזון ואירוח</div>
+    <div class="card-balance" style="font-size:24px; color:var(--accent-purple)">₪15,175</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪2.5K/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-purple);">📊 פירוט</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">כרטיס אשראי</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value" style="color:var(--accent-purple)">~₪2,529</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+        <div class="metric-row"><span class="metric-label">% מהוצאות כ.אשראי</span><span class="metric-value">1.4%</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header">🔧 ציוד</div>
+    <div class="card-balance" style="font-size:24px;">₪11,119</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪1.9K/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">כרטיס אשראי</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value">~₪1,853</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header">🔨 אחזקה</div>
+    <div class="card-balance" style="font-size:24px;">₪5,637</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪940/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">כרטיס אשראי</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value">~₪940</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header">🚗 תחבורה</div>
+    <div class="card-balance" style="font-size:24px;">₪5,140</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪857/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">כרטיס אשראי</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value">~₪857</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header">🛡️ ביטוח</div>
+    <div class="card-balance" style="font-size:24px;">₪1,809</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪302/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">כרטיס אשראי</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value">~₪302</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header">📢 פרסום</div>
+    <div class="card-balance" style="font-size:24px;">₪1,628</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪271/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">כרטיס אשראי</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value">~₪271</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+</div>
+
+<!-- BANK EXPENSES -->
+<div class="section-header animate-in delay-1">
+  <div class="section-icon" style="background:var(--accent-blue-dim); color:var(--accent-blue)">🏦</div>
+  <h2 class="section-title">הוצאות בנק — מרפאה</h2>
+  <span class="section-badge" style="background:var(--accent-blue-dim); color:var(--accent-blue)">ספט 2025 — מרץ 2026</span>
+</div>
+
+<div class="cards-grid cards-2 animate-in delay-2">
+  <div class="card card-expandable" onclick="toggleCard(this)" style="border-top: 3px solid var(--accent-blue);">
+    <div class="cat-header" style="color:var(--accent-blue)">👥 שכר וכוח אדם</div>
+    <div class="card-balance" style="font-size:28px; color:var(--accent-blue)">₪675,173</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪112.5K/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-blue);">📊 פירוט</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">העברה בנקאית</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value" style="color:var(--accent-blue)">~₪112,529</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+        <div class="metric-row"><span class="metric-label">% מהוצאות בנק</span><span class="metric-value">52.5%</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)" style="border-top: 3px solid var(--accent-amber);">
+    <div class="cat-header" style="color:var(--accent-amber)">📋 מסים (מע"מ)</div>
+    <div class="card-balance" style="font-size:28px; color:var(--accent-amber)">₪460,691</div>
+    <div class="card-balance-label">סה"כ 6 חודשים · ~₪76.8K/חודש</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="details-section-title" style="color:var(--accent-amber);">📊 פירוט</div>
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">העברה בנקאית</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value" style="color:var(--accent-amber)">~₪76,782</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+        <div class="metric-row"><span class="metric-label">% מהוצאות בנק</span><span class="metric-value">35.8%</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header">🔄 העברות בנקאיות</div>
+    <div class="card-balance" style="font-size:24px;">₪87,055</div>
+    <div class="card-balance-label">ניתוחים, ספקים</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">העברה בנקאית</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value">~₪14,509</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+        <div class="metric-row"><span class="metric-label">כולל</span><span class="metric-value">ניתוחים, ספקים חיצוניים</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+
+  <div class="card card-expandable" onclick="toggleCard(this)">
+    <div class="cat-header">📝 הוראות קבע</div>
+    <div class="card-balance" style="font-size:24px;">₪62,300</div>
+    <div class="card-balance-label">סה"כ 6 חודשים</div>
+    <div class="card-details"><div class="card-details-inner">
+      <div class="card-metrics">
+        <div class="metric-row"><span class="metric-label">סוג חיוב</span><span class="metric-value">הוראת קבע</span></div>
+        <div class="metric-row"><span class="metric-label">ממוצע חודשי</span><span class="metric-value">~₪10,383</span></div>
+        <div class="metric-row"><span class="metric-label">תקופה</span><span class="metric-value">ספט 2025 — מרץ 2026</span></div>
+      </div>
+    </div></div>
+    <div class="card-expand-hint"><span class="hint-text-closed">לחץ לפירוט</span><span class="hint-text-open">סגור</span> <span class="expand-arrow">▼</span></div>
+  </div>
+</div>
+
+</div><!-- /tab-clinic -->
+
+</main>
+
+<footer class="footer">
+  <p>הדשבורד מבוסס על דוחות שנתיים 2024-2025, דוח המסלקה הפנסיונית (30/11/2025), האזור האישי במנורה (23/03/2026), הר הביטוח (24/03/2026) ונתוני אקסלים של המרפאה</p>
+  <p style="margin-top:4px;">הנתונים להמחשה בלבד ואינם מהווים ייעוץ פנסיוני או פיננסי</p>
+</footer>
+
+</div>
+
+<script>
+// Tab switching
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  document.getElementById('tabBtn-' + tabId).classList.add('active');
+  // Re-trigger animations
+  document.querySelectorAll('#tab-' + tabId + ' .animate-in').forEach(el => {
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = '';
+    el.style.animationPlayState = 'running';
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Deposits data
+const months = [
+  { label: '12/2024', date: '12/01/2025' },
+  { label: '01/2025', date: '10/02/2025' },
+  { label: '02/2025', date: '09/03/2025' },
+  { label: '03/2025', date: '09/04/2025' },
+  { label: '04/2025', date: '08/05/2025' },
+  { label: '05/2025', date: '05/06/2025' },
+  { label: '06/2025', date: '09/07/2025' },
+  { label: '07/2025', date: '10/08/2025' },
+  { label: '08/2025', date: '09/09/2025' },
+  { label: '09/2025', date: '08/10/2025' },
+  { label: '10/2025', date: '05/11/2025' },
+];
+
+const pension = { employee: 1320, employer: 1430, severance: 1832.60 };
+const hish = { employee: 392.80, employer: 1178.40 };
+const insurance = 323;
+
+// Build table
+const tbody = document.getElementById('depositsTableBody');
+months.forEach(m => {
+  const total = pension.employee + pension.employer + pension.severance + hish.employee + hish.employer + insurance;
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${m.label}</td>
+    <td class="num">\u20AA${pension.employee.toLocaleString()}</td>
+    <td class="num">\u20AA${pension.employer.toLocaleString()}</td>
+    <td class="num">\u20AA${pension.severance.toLocaleString()}</td>
+    <td class="num">\u20AA${hish.employee.toLocaleString()}</td>
+    <td class="num">\u20AA${hish.employer.toLocaleString()}</td>
+    <td class="num">\u20AA${insurance}</td>
+    <td class="num" style="font-weight:600; color:var(--accent-green)">\u20AA${total.toLocaleString()}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+// Build bar chart
+const barChart = document.getElementById('barChart');
+const maxTotal = pension.employee + pension.employer + pension.severance + hish.employee + hish.employer + insurance;
+const segments = [
+  { value: pension.employee, color: 'var(--accent-green)', label: 'עובד פנסיה' },
+  { value: pension.employer, color: '#34d399', label: 'מעסיק פנסיה' },
+  { value: pension.severance, color: '#065f46', label: 'פיצויים' },
+  { value: hish.employee, color: 'var(--accent-blue)', label: 'עובד השתלמות' },
+  { value: hish.employer, color: '#1e40af', label: 'מעסיק השתלמות' },
+  { value: insurance, color: 'var(--accent-rose)', label: 'ביטוח' },
+];
+
+months.forEach(m => {
+  const group = document.createElement('div');
+  group.className = 'bar-group';
+  const stack = document.createElement('div');
+  stack.className = 'bar-stack';
+  segments.forEach(s => {
+    const seg = document.createElement('div');
+    seg.className = 'bar-segment';
+    const h = (s.value / maxTotal) * 150;
+    seg.style.height = h + 'px';
+    seg.style.background = s.color;
+    seg.title = `${s.label}: \u20AA${s.value.toLocaleString()}`;
+    stack.appendChild(seg);
+  });
+  group.appendChild(stack);
+  const label = document.createElement('div');
+  label.className = 'bar-label';
+  label.textContent = m.label.substring(0, 5);
+  group.appendChild(label);
+  barChart.appendChild(group);
+});
+
+// Expandable cards
+function toggleCard(el) {
+  el.classList.toggle('expanded');
+}
+
+// Collapsible
+function toggleDeposits() {
+  const content = document.getElementById('depositsContent');
+  const trigger = document.getElementById('depositsTrigger');
+  content.classList.toggle('open');
+  trigger.classList.toggle('open');
+}
+
+// Intersection Observer for animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animationPlayState = 'running';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.animate-in').forEach(el => {
+  el.style.animationPlayState = 'paused';
+  observer.observe(el);
+});
+// Play immediately for visible elements
+document.querySelectorAll('.animate-in').forEach(el => {
+  const rect = el.getBoundingClientRect();
+  if (rect.top < window.innerHeight) {
+    el.style.animationPlayState = 'running';
+  }
+});
+
+// ══════════════════════════════════════════════════
+// FEATURE 1: DATA VERSIONS — Time-Depth Versioning
+// ══════════════════════════════════════════════════
+const DATA_VERSIONS = {
+  pension_menora: {
+    label: 'קרן פנסיה — מנורה',
+    versions: [
+      {
+        date: '30/11/2025',
+        source: 'מסלקה פנסיונית',
+        values: { balance: 1274589, pension_estimate: 16941, monthly_deposit: 4582.60, insured_salary: 22023 }
+      },
+      {
+        date: '23/03/2026',
+        source: 'אתר מנורה',
+        values: { balance: 1210118, pension_estimate: 10843, monthly_deposit: 4582.60, insured_salary: 22023 }
+      }
+    ],
+    valueLabels: { balance: 'יתרה', pension_estimate: 'קצבה צפויה', monthly_deposit: 'הפקדה חודשית', insured_salary: 'שכר מבוטח' }
+  },
+  hishtalmut_yalin: {
+    label: 'קרן השתלמות — ילין לפידות',
+    versions: [
+      {
+        date: '30/11/2025',
+        source: 'מסלקה פנסיונית',
+        values: { balance: 209441, return_2025: 18.70 }
+      }
+    ],
+    valueLabels: { balance: 'יתרה', return_2025: 'תשואה 2025 (%)' }
+  },
+  hishtalmut_excellens: {
+    label: 'קרן השתלמות — אקסלנס',
+    versions: [
+      {
+        date: '30/11/2025',
+        source: 'מסלקה פנסיונית',
+        values: { balance: 32642, return_2025: 13.67 }
+      }
+    ],
+    valueLabels: { balance: 'יתרה', return_2025: 'תשואה 2025 (%)' }
+  },
+  insurance_car_idi: {
+    label: 'ביטוח רכב — IDI',
+    versions: [
+      {
+        date: '24/03/2026',
+        source: 'הר הביטוח',
+        values: { annual_premium: 6124, policy_end: '31/08/2026' }
+      }
+    ],
+    valueLabels: { annual_premium: 'פרמיה שנתית', policy_end: 'תום פוליסה' }
+  },
+  insurance_health_harel: {
+    label: 'ביטוח בריאות — הראל',
+    versions: [
+      {
+        date: '24/03/2026',
+        source: 'הר הביטוח',
+        values: { monthly_premium: 229.54, policy_end: '01/02/2029' }
+      }
+    ],
+    valueLabels: { monthly_premium: 'פרמיה חודשית', policy_end: 'תום פוליסה' }
+  },
+  insurance_risk_phoenix: {
+    label: 'ריסק 1 — הפניקס',
+    versions: [
+      {
+        date: '24/03/2026',
+        source: 'הר הביטוח',
+        values: { monthly_premium: 330.10, death_coverage: 354501, akw_monthly: 5908 }
+      }
+    ],
+    valueLabels: { monthly_premium: 'פרמיה חודשית', death_coverage: 'כיסוי מוות', akw_monthly: 'אכ"ע חודשי' }
+  },
+  insurance_maslul_phoenix: {
+    label: 'מסלול — הפניקס',
+    versions: [
+      {
+        date: '30/11/2025',
+        source: 'מסלקה פנסיונית',
+        values: { balance: 5523, return_2025: 14.85 }
+      }
+    ],
+    valueLabels: { balance: 'יתרה', return_2025: 'תשואה 2025 (%)' }
+  },
+  insurance_menora_akw: {
+    label: 'אכ"ע מטריה — מנורה',
+    versions: [
+      {
+        date: '30/11/2025',
+        source: 'מסלקה פנסיונית',
+        values: { premium: 0, coverage_end: '01/08/2038' }
+      }
+    ],
+    valueLabels: { premium: 'פרמיה', coverage_end: 'תום כיסוי' }
+  },
+  home_fixed: {
+    label: 'הוצאות בית קבועות',
+    versions: [
+      {
+        date: '23/03/2026',
+        source: 'דו"ח בנק + כרטיסי אשראי',
+        values: { total_monthly: 8003 }
+      }
+    ],
+    valueLabels: { total_monthly: 'סה"כ חודשי' }
+  },
+  home_variable: {
+    label: 'הוצאות בית משתנות',
+    versions: [
+      {
+        date: '23/03/2026',
+        source: 'כרטיסי אשראי ינו-פבר 2026',
+        values: { avg_monthly: 12099 }
+      }
+    ],
+    valueLabels: { avg_monthly: 'ממוצע חודשי' }
+  }
+};
+
+function formatVersionValue(val) {
+  if (typeof val === 'number') {
+    if (val >= 1000) return '\u20AA' + val.toLocaleString();
+    if (val < 100 && val > -100 && val !== Math.floor(val)) return val.toFixed(2) + '%';
+    return '\u20AA' + val.toLocaleString();
+  }
+  return val;
+}
+
+function buildVersionTimeline(key) {
+  const data = DATA_VERSIONS[key];
+  if (!data) return '';
+  const versions = data.versions;
+  let html = '<div class="version-timeline-title">\uD83D\uDCC5 \u05D4\u05D9\u05E1\u05D8\u05D5\u05E8\u05D9\u05D9\u05EA \u05E2\u05D3\u05DB\u05D5\u05E0\u05D9\u05DD</div>';
+  html += '<div class="version-timeline">';
+
+  versions.slice().reverse().forEach((ver, idx) => {
+    const isLatest = idx === 0;
+    const prevVer = idx < versions.length - 1 ? versions[versions.length - 1 - idx - 1] : null;
+
+    html += '<div class="version-entry">';
+    html += '<div class="version-dot ' + (isLatest ? 'latest' : 'old') + '"></div>';
+    if (idx < versions.slice().length - 1) {
+      html += '<div class="version-line"></div>';
+    }
+    html += '<div class="version-info">';
+    html += '<div class="version-date">' + ver.date + '</div>';
+    html += '<div class="version-source">\u05DE\u05E7\u05D5\u05E8: ' + ver.source + '</div>';
+
+    if (versions.length === 1) {
+      html += '<div class="version-first-badge">\u05E2\u05D3\u05DB\u05D5\u05DF \u05E8\u05D0\u05E9\u05D5\u05DF</div>';
+    }
+
+    html += '<div class="version-values">';
+    for (const [k, v] of Object.entries(ver.values)) {
+      html += '<div class="version-val-item">';
+      html += '<div class="version-val-label">' + (data.valueLabels[k] || k) + '</div>';
+      html += '<div class="version-val-num">' + formatVersionValue(v);
+
+      // Show delta if there's a previous version
+      if (prevVer && prevVer.values[k] !== undefined && typeof v === 'number' && typeof prevVer.values[k] === 'number') {
+        const delta = v - prevVer.values[k];
+        if (delta !== 0) {
+          const cls = delta > 0 ? 'positive' : 'negative';
+          const sign = delta > 0 ? '+' : '';
+          html += ' <span class="version-delta ' + cls + '">(' + sign;
+          if (Math.abs(delta) >= 1000) {
+            html += '\u20AA' + delta.toLocaleString();
+          } else {
+            html += delta.toFixed(2);
+          }
+          html += ')</span>';
+        }
+      }
+
+      html += '</div></div>';
+    }
+    html += '</div></div></div>';
+  });
+
+  html += '</div>';
+  return html;
+}
+
+// Inject version timelines into cards after DOM is ready
+(function injectVersionTimelines() {
+  // Map card IDs to version keys — we'll use data attributes
+  const cardMappings = document.querySelectorAll('[data-version-key]');
+  cardMappings.forEach(card => {
+    const key = card.getAttribute('data-version-key');
+    const detailsInner = card.querySelector('.card-details-inner');
+    if (detailsInner && DATA_VERSIONS[key]) {
+      const timelineDiv = document.createElement('div');
+      timelineDiv.innerHTML = buildVersionTimeline(key);
+      detailsInner.appendChild(timelineDiv);
+    }
+  });
+})();
+</script>
+</body>
+</html>
