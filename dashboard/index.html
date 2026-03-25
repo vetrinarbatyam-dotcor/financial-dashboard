@@ -916,6 +916,73 @@ tfoot td.num {
 </style>
 </head>
 <body>
+
+<!-- PASSWORD SCREEN -->
+<div id="lockScreen" style="
+  position:fixed; inset:0; z-index:9999;
+  background: var(--bg-deep);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Heebo',sans-serif;
+">
+  <div style="
+    background:var(--bg-card); border:1px solid var(--border);
+    border-radius:var(--radius-xl); padding:48px; max-width:400px; width:90%;
+    text-align:center; box-shadow: var(--shadow-glow);
+  ">
+    <div style="
+      width:64px; height:64px; margin:0 auto 20px;
+      background:var(--gradient-hero); border-radius:16px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:28px; font-weight:800; color:var(--bg-deep);
+    ">₪</div>
+    <h1 style="font-size:24px; font-weight:700; color:var(--text-primary); margin-bottom:8px;">דשבורד פיננסי</h1>
+    <p style="font-size:14px; color:var(--text-muted); margin-bottom:28px;">הזן סיסמה כדי לגשת לדשבורד</p>
+    <input id="passInput" type="password" placeholder="סיסמה" autocomplete="off" style="
+      width:100%; padding:14px 18px; border-radius:12px;
+      background:var(--bg-elevated); border:1px solid var(--border);
+      color:var(--text-primary); font-size:16px; font-family:inherit;
+      text-align:center; outline:none; margin-bottom:16px;
+      transition: border-color 0.2s;
+    " onfocus="this.style.borderColor='var(--accent-green)'" onblur="this.style.borderColor='var(--border)'">
+    <button onclick="checkPass()" style="
+      width:100%; padding:14px; border-radius:12px;
+      background:var(--gradient-hero); border:none;
+      color:var(--bg-deep); font-size:16px; font-weight:700;
+      font-family:inherit; cursor:pointer;
+      transition: opacity 0.2s;
+    " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">כניסה</button>
+    <p id="passError" style="color:var(--accent-rose); font-size:13px; margin-top:12px; display:none;">סיסמה שגויה</p>
+  </div>
+</div>
+<script>
+// SHA-256 hash of the password "gil2025"
+const PASS_HASH = '25a790e938ecdd04805b071b75e2684d2f0697da915edb46010cc215bc84a174';
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+async function checkPass() {
+  const input = document.getElementById('passInput').value;
+  const hash = await sha256(input);
+  if (hash === PASS_HASH) {
+    document.getElementById('lockScreen').style.display = 'none';
+    sessionStorage.setItem('dashboard_auth','1');
+  } else {
+    document.getElementById('passError').style.display = 'block';
+    document.getElementById('passInput').style.borderColor = 'var(--accent-rose)';
+    setTimeout(() => { document.getElementById('passError').style.display = 'none'; }, 2000);
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('dashboard_auth') === '1') {
+    document.getElementById('lockScreen').style.display = 'none';
+  }
+  document.getElementById('passInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPass();
+  });
+});
+</script>
+
 <div class="app">
 
 <!-- HEADER -->
