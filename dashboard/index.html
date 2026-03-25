@@ -740,6 +740,38 @@ tfoot td.num {
 .card-expandable.expanded .card-expand-hint .expand-arrow { transform: rotate(180deg); }
 .card-expandable.expanded .card-expand-hint .hint-text-closed { display: none; }
 .card-expandable:not(.expanded) .card-expand-hint .hint-text-open { display: none; }
+/* ── DEPOSIT COUNT BADGES ── */
+.deposit-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+.deposit-count-badge.ok {
+  background: var(--accent-green-dim);
+  color: var(--accent-green);
+  border: 1px solid rgba(99,212,170,0.2);
+}
+.deposit-count-badge.missing {
+  background: rgba(251,113,133,0.15);
+  color: #ff4d6a;
+  border: 1px solid rgba(251,113,133,0.4);
+  font-size: 15px;
+  font-weight: 800;
+  padding: 10px 20px;
+  animation: alertPulse 1.5s ease-in-out infinite;
+}
+@keyframes alertPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(251,113,133,0.4); }
+  50% { box-shadow: 0 0 20px 4px rgba(251,113,133,0.3); }
+}
+.deposit-count-badge .badge-icon { font-size: 16px; }
+.deposit-count-badge.missing .badge-icon { font-size: 20px; }
+
 .card-details {
   max-height: 0;
   overflow: hidden;
@@ -1087,6 +1119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="card-policy">פוליסה: 25614199 · מאז 10/2006 · מעסיק: המרכז לרפואה וטרינרית-ד"ר גיל קרן בע"מ</div>
     <div class="track-badge track-green">מסלול השקעה: S&P 500 עוקב מדד 🇺🇸</div>
     <span class="track-badge" style="background:rgba(251,191,36,0.1); border-color:rgba(251,191,36,0.2); color:var(--accent-amber);">מסלול ביטוח: 75% נכות / 100% שאירים</span>
+    <div class="deposit-count-badge missing"><span class="badge-icon">⚠️</span> 11 הפקדות מתוך 12 — חסרה הפקדה 1! לטיפול</div>
     <div style="display:flex; gap:40px; align-items:flex-end; flex-wrap:wrap; margin-top:8px;">
       <div>
         <div class="card-balance" style="color:var(--accent-green)">₪1,210,118</div>
@@ -1101,7 +1134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="card-details"><div class="card-details-inner">
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
         <div>
-          <div class="details-section-title">💰 הפקדות חודשיות</div>
+          <div class="details-section-title">💰 הפקדות חודשיות <span style="color:#ff4d6a; font-size:12px;">(11/12 — חסר 11/2025)</span></div>
           <div class="card-metrics">
             <div class="metric-row"><span class="metric-label">הפקדה — עובד (6%)</span><span class="metric-value">₪1,320</span></div>
             <div class="metric-row"><span class="metric-label">הפקדה — מעסיק (6.5%)</span><span class="metric-value">₪1,430</span></div>
@@ -1171,6 +1204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="card-name">קרן השתלמות</div>
     <div class="card-policy">70896526 · מאז 01/2019</div>
     <div class="track-badge">מסלול כללי</div>
+    <div class="deposit-count-badge missing"><span class="badge-icon">⚠️</span> 11 הפקדות מתוך 12 — חסרה הפקדה 1! לטיפול</div>
     <div class="card-balance" style="color:var(--accent-blue)">₪209,441</div>
     <div class="card-balance-label">ניתן למשיכה</div>
     <div class="card-metrics">
@@ -1178,12 +1212,13 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="metric-row"><span class="metric-label">הפקדה חודשית</span><span class="metric-value">₪1,571.20</span></div>
     </div>
     <div class="card-details"><div class="card-details-inner">
-      <div class="details-section-title">💰 הפקדות</div>
+      <div class="details-section-title">💰 הפקדות <span style="color:#ff4d6a; font-size:12px;">(11/12 — חסר 11/2025)</span></div>
       <div class="card-metrics">
         <div class="metric-row"><span class="metric-label">הפקדה — עובד (2.5%)</span><span class="metric-value">₪392.80</span></div>
         <div class="metric-row"><span class="metric-label">הפקדה — מעסיק (7.5%)</span><span class="metric-value">₪1,178.40</span></div>
         <div class="metric-row"><span class="metric-label">שכר מדווח</span><span class="metric-value">₪15,712</span></div>
         <div class="metric-row"><span class="metric-label">הפקדה אחרונה</span><span class="metric-value">11/2025</span></div>
+        <div class="metric-row"><span class="metric-label" style="color:#ff4d6a; font-weight:700;">⚠️ הפקדות שנה</span><span class="metric-value" style="color:#ff4d6a; font-weight:700;">11 מתוך 12</span></div>
       </div>
       <div class="details-section-title" style="color:var(--accent-amber);">⚖️ דמי ניהול</div>
       <div class="card-metrics">
@@ -1277,7 +1312,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </tr></thead>
         <tbody id="depositsTableBody"></tbody>
         <tfoot><tr>
-          <td><strong>סה״כ שנתי (11 חודשים)</strong></td>
+          <td><strong>סה״כ שנתי (11 חודשים) <span style="color:#ff4d6a;">⚠️ חסר חודש!</span></strong></td>
           <td class="num">₪14,520</td><td class="num">₪15,730</td><td class="num">₪20,158.60</td><td class="num">₪4,320.80</td><td class="num">₪12,962.40</td><td class="num">₪3,553</td>
           <td class="num" style="color:var(--accent-green); font-size:15px;">₪71,244.80</td>
         </tr></tfoot>
@@ -1451,6 +1486,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="card-provider">הפניקס</div>
     <div class="card-name">ריסק 1 — ביטוח סיכון טהור</div>
     <div class="card-policy">8052812016 · 06/2014 עד 06/2049</div>
+    <div class="deposit-count-badge ok"><span class="badge-icon">✅</span> 12 תשלומים מתוך 12 — תקין</div>
     <div class="insurance-coverage">
       <div class="coverage-item"><div class="coverage-icon">💀</div><div class="coverage-label">ביטוח מוות</div><div class="coverage-value" style="color:var(--accent-rose)">₪354,501</div></div>
       <div class="coverage-item"><div class="coverage-icon">🩺</div><div class="coverage-label">אכ"ע חודשי</div><div class="coverage-value" style="color:var(--accent-amber)">₪5,908</div></div>
