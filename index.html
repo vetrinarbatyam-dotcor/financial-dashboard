@@ -956,7 +956,7 @@ tfoot td.num {
 </div>
 <script>
 // SHA-256 hash of the password "gil2025"
-const PASS_HASH = '25a790e938ecdd04805b071b75e2684d2f0697da915edb46010cc215bc84a174';
+const PASS_HASH = 'a6cc0c6725b454a6c9d01c073170158f8e96f6730c1d887029dfa8946a569f34';
 async function sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
