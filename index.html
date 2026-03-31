@@ -1046,6 +1046,9 @@ document.addEventListener('DOMContentLoaded', () => {
   <button class="tab-btn" onclick="switchTab('clinic')" id="tabBtn-clinic">
     <span class="tab-icon">🏥</span> הוצאות מרפאה
   </button>
+  <button class="tab-btn" onclick="switchTab('services')" id="tabBtn-services">
+    <span class="tab-icon">🔌</span> שירותים ו-API
+  </button>
 </nav>
 
 <main class="main">
@@ -2083,6 +2086,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </div><!-- /tab-clinic -->
 
+<!-- ═══════════════════════ SERVICES TAB ═══════════════════════ -->
+<div class="tab-content" id="tab-services">
+
+<div class="section-header animate-in">
+  <h2>שירותים ומפתחות API</h2>
+  <p class="section-sub">כל השירותים החיצוניים, סוג החיבור, ומצב התשלום</p>
+</div>
+
+<div style="overflow-x:auto; margin-top:20px;" class="animate-in">
+<table style="width:100%; border-collapse:collapse; font-size:14px; direction:rtl;">
+  <thead>
+    <tr style="background:var(--bg-elevated); border-bottom:2px solid var(--border-accent);">
+      <th style="padding:12px 16px; text-align:right; color:var(--accent-green);">שירות</th>
+      <th style="padding:12px 16px; text-align:right; color:var(--accent-green);">שימוש</th>
+      <th style="padding:12px 16px; text-align:center; color:var(--accent-green);">סוג חיבור</th>
+      <th style="padding:12px 16px; text-align:center; color:var(--accent-green);">מפתח קיים?</th>
+      <th style="padding:12px 16px; text-align:right; color:var(--accent-green);">שכבה חינמית</th>
+      <th style="padding:12px 16px; text-align:right; color:var(--accent-green);">תשלום/תוכנית</th>
+      <th style="padding:12px 16px; text-align:right; color:var(--accent-green);">הערות / עדכון</th>
+    </tr>
+  </thead>
+  <tbody id="servicesTableBody">
+  </tbody>
+</table>
+</div>
+
+<div style="margin-top:24px; padding:16px; background:var(--bg-card); border-radius:var(--radius-md); border:1px solid var(--border);" class="animate-in">
+  <p style="color:var(--text-secondary); font-size:13px;">
+    <strong style="color:var(--accent-amber);">שים לב:</strong>
+    מפתחות API לעולם לא מוצגים כאן. כל המפתחות מאוחסנים בקבצי <code>.env</code> מקומיים שלא עולים ל-git.
+  </p>
+</div>
+
+</div><!-- /tab-services -->
+
 </main>
 
 <footer class="footer">
@@ -2192,6 +2230,62 @@ function toggleDeposits() {
   content.classList.toggle('open');
   trigger.classList.toggle('open');
 }
+
+// ═══════════════════════════════════
+// SERVICES TABLE
+// ═══════════════════════════════════
+const services = [
+  { name: 'Claude (Anthropic)', use: 'AI ראשי, קידוד, אוטומציה', type: 'OAuth', hasKey: true, free: 'לא', plan: 'Max 5x', notes: '' },
+  { name: 'Green API (WhatsApp)', use: 'שליחת הודעות WhatsApp', type: 'API Key', hasKey: true, free: 'כן — מכשיר 1', plan: 'חינם / $15 לחודש', notes: '' },
+  { name: 'ElevenLabs', use: 'TTS הודעות קוליות + תמלול', type: 'API Key', hasKey: true, free: 'כן — 10K תווים/חודש', plan: 'לפי צריכה', notes: '' },
+  { name: 'Google Gemini', use: 'יצירת תמונות AI', type: 'API Key', hasKey: true, free: 'כן — 15 RPM', plan: 'לפי צריכה', notes: '' },
+  { name: 'xAI (Grok)', use: 'יצירת וידאו AI', type: 'API Key', hasKey: true, free: 'לא ברור', plan: 'לפי צריכה', notes: '' },
+  { name: 'fal.ai', use: 'תמונות/וידאו (מצב זול)', type: 'API Key', hasKey: false, free: 'כן — $10 קרדיט', plan: '$0.003/תמונה', notes: 'צריך להגדיר FAL_KEY' },
+  { name: 'Supabase', use: 'DB — clinic-pal-hub, vet-hub', type: 'API Key', hasKey: true, free: 'כן — 500MB DB', plan: '$25/חודש Pro', notes: '2 פרויקטים פעילים' },
+  { name: 'Google OAuth', use: 'Gmail bot (OpenClaw)', type: 'OAuth', hasKey: true, free: 'כן — חינם', plan: 'חינם', notes: '' },
+  { name: 'Gmail App Password', use: 'שליחת מיילים (OpenClaw)', type: 'App Password', hasKey: true, free: 'כן — חינם', plan: 'חינם', notes: '' },
+  { name: 'GitHub Pages', use: 'אירוח אתרים סטטיים', type: 'CLI (gh)', hasKey: true, free: 'כן — unlimited', plan: 'חינם', notes: '' },
+  { name: 'Vercel', use: 'אירוח clinic-pal-hub', type: 'GitHub Integration', hasKey: true, free: 'כן — Hobby plan', plan: 'חינם / $20 Pro', notes: '' },
+  { name: 'Render', use: 'אירוח mezimot', type: 'GitHub Integration', hasKey: true, free: 'כן — Hobby plan', plan: 'חינם / $7 Instance', notes: '' },
+  { name: 'Turso (LibSQL)', use: 'DB — pet-export-portal', type: 'API Key', hasKey: true, free: 'כן — 500 DBs, 9GB', plan: '$29/חודש Scaler', notes: '' },
+  { name: 'ClinicaOnline', use: 'ניהול מרפאה וטרינרית', type: 'Login (Browser)', hasKey: true, free: 'לא', plan: 'מנוי חודשי', notes: '' },
+  { name: 'Zapier MCP', use: 'אוטומציית Gmail (ביקורת מרפאט)', type: 'MCP', hasKey: true, free: 'כן — 100 tasks/חודש', plan: '$20/חודש Starter', notes: '' },
+  { name: 'OpenClaw (Oracle Server)', use: 'שרת AI gateway', type: 'SSH + OAuth', hasKey: true, free: 'Oracle Free Tier', plan: 'חינם', notes: 'IP: 151.145.92.190' },
+  { name: 'DeepSeek', use: 'LLM חלופי (דרך OpenClaw)', type: 'API דרך Gateway', hasKey: false, free: 'כן — חלקי', plan: 'לפי צריכה', notes: 'מוגדר בשרת OpenClaw' },
+];
+
+const stBody = document.getElementById('servicesTableBody');
+services.forEach((s, i) => {
+  const rowBg = i % 2 === 0 ? 'var(--bg-card)' : 'var(--bg-elevated)';
+  const keyBadge = s.hasKey
+    ? '<span style="background:var(--accent-green-dim);color:var(--accent-green);padding:3px 10px;border-radius:20px;font-size:12px;">פעיל</span>'
+    : '<span style="background:var(--accent-rose-dim);color:var(--accent-rose);padding:3px 10px;border-radius:20px;font-size:12px;">חסר</span>';
+  const typeBadge = {
+    'API Key': 'var(--accent-blue)',
+    'OAuth': 'var(--accent-purple)',
+    'MCP': 'var(--accent-amber)',
+    'CLI (gh)': 'var(--accent-green)',
+    'SSH + OAuth': 'var(--accent-purple)',
+    'Login (Browser)': 'var(--accent-amber)',
+    'GitHub Integration': 'var(--accent-green)',
+    'App Password': 'var(--accent-rose)',
+    'API דרך Gateway': 'var(--accent-blue)',
+  }[s.type] || 'var(--text-secondary)';
+
+  const tr = document.createElement('tr');
+  tr.style.background = rowBg;
+  tr.style.borderBottom = '1px solid var(--border)';
+  tr.innerHTML = `
+    <td style="padding:12px 16px;font-weight:600;color:var(--text-primary);">${s.name}</td>
+    <td style="padding:12px 16px;color:var(--text-secondary);">${s.use}</td>
+    <td style="padding:12px 16px;text-align:center;"><span style="color:${typeBadge};font-size:12px;background:rgba(255,255,255,0.05);padding:3px 10px;border-radius:20px;">${s.type}</span></td>
+    <td style="padding:12px 16px;text-align:center;">${keyBadge}</td>
+    <td style="padding:12px 16px;color:var(--text-secondary);font-size:13px;">${s.free}</td>
+    <td style="padding:12px 16px;color:var(--text-secondary);font-size:13px;">${s.plan}</td>
+    <td style="padding:12px 16px;color:var(--text-muted);font-size:13px;"><span contenteditable="true" style="outline:none;min-width:60px;display:inline-block;border-bottom:1px dashed var(--border);padding:2px 4px;">${s.notes || 'הוסף הערה...'}</span></td>
+  `;
+  stBody.appendChild(tr);
+});
 
 // Intersection Observer for animations
 const observer = new IntersectionObserver((entries) => {

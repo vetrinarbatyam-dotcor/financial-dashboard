@@ -1,3 +1,10 @@
 .claude/
 dashboard/bank_data.json
 dashboard/parse_data.py
+.playwright-mcp/
+*.png
+
+# Environment variables
+.env
+.env.local
+.env.*.local
