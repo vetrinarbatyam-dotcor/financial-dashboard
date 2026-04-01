@@ -2251,7 +2251,11 @@ const services = [
   { name: 'ClinicaOnline', use: 'ניהול מרפאה וטרינרית', type: 'Login (Browser)', hasKey: true, free: 'לא', plan: 'מנוי חודשי', notes: '' },
   { name: 'Zapier MCP', use: 'אוטומציית Gmail (ביקורת מרפאט)', type: 'MCP', hasKey: true, free: 'כן — 100 tasks/חודש', plan: '$20/חודש Starter', notes: '' },
   { name: 'OpenClaw (Oracle Server)', use: 'שרת AI gateway', type: 'SSH + OAuth', hasKey: true, free: 'Oracle Free Tier', plan: 'חינם', notes: 'IP: 151.145.92.190' },
-  { name: 'DeepSeek', use: 'LLM חלופי (דרך OpenClaw)', type: 'API דרך Gateway', hasKey: false, free: 'כן — חלקי', plan: 'לפי צריכה', notes: 'מוגדר בשרת OpenClaw' },
+  { name: 'DeepSeek', use: 'LLM חלופי (דרך OpenClaw)', type: 'API Key', hasKey: true, free: 'כן — חלקי', plan: 'לפי צריכה', notes: 'מוגדר בשרת OpenClaw' },
+  { name: 'Telegram Bot', use: 'בוט טלגרם', type: 'API Key', hasKey: true, free: 'כן — חינם', plan: 'חינם', notes: '' },
+  { name: 'Gmail SMTP (מרפאט)', use: 'שליחת מיילי ביקורת', type: 'App Password', hasKey: true, free: 'כן — חינם', plan: 'חינם', notes: 'vetrinarbatyam@gmail.com' },
+  { name: 'Contabo VPS', use: 'שרתים וירטואליים', type: 'SSH', hasKey: true, free: 'לא', plan: '~$5/חודש לשרת', notes: '2 שרתים פעילים' },
+  { name: 'Tailscale', use: 'VPN mesh בין שרתים', type: 'CLI', hasKey: true, free: 'כן — 100 מכשירים', plan: 'חינם', notes: '' },
 ];
 
 const stBody = document.getElementById('servicesTableBody');
