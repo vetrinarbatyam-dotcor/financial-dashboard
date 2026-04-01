@@ -4,6 +4,8 @@ dashboard/parse_data.py
 .playwright-mcp/
 *.png
 
+PASSWORDS_TEMP.md
+
 # Environment variables
 .env
 .env.local
