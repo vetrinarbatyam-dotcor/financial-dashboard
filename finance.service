@@ -1,0 +1,17 @@
+[Unit]
+Description=OR Finance — Stock Analysis API
+After=network.target
+
+[Service]
+Type=simple
+User=claude-user
+WorkingDirectory=/home/claude-user/Finance/backend
+EnvironmentFile=/home/claude-user/Finance/backend/.env
+ExecStart=/home/claude-user/Finance/venv/bin/python main.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
