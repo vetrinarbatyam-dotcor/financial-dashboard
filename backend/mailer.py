@@ -3,20 +3,23 @@ mailer.py — HTML email report sender for OR Finance.
 Sends a beautiful RTL Hebrew analysis report via Yahoo SMTP.
 """
 
+import os
 import smtplib
 import html as html_module
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from datetime import datetime
 
-# ---------------------------------------------------------------------------
-# SMTP credentials (hardcoded — move to env vars if needed)
-# ---------------------------------------------------------------------------
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
-SMTP_HOST = "smtp.mail.yahoo.com"
-SMTP_PORT = 587
-SMTP_USER = "vet_batyam@yahoo.com"
-SMTP_PASS = "htqlobubdfdrwfic"
+SMTP_HOST    = "smtp.mail.yahoo.com"
+SMTP_PORT    = 587
+SMTP_USER    = os.environ["YAHOO_EMAIL"]
+SMTP_PASS    = os.environ["YAHOO_APP_PASSWORD"]
 TO_ADDRESSES = ["vet_batyam@yahoo.com", "vetrinarbatyam@gmail.com"]
 
 
