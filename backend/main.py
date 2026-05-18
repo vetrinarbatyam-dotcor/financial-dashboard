@@ -22,6 +22,7 @@ from agents.management import analyze_management
 from agents.financial import analyze_financial
 from agents.growth import analyze_growth
 from agents.market import analyze_market
+from agents.retail import analyze_retail
 from scorer import score_profiles
 from cache import save_analysis, get_history, get_stock_full_history
 from screener import (
@@ -33,6 +34,7 @@ from screener import (
     get_latest_screen_run_meta,
     get_latest_screen_results,
     init_screen_db,
+    get_all_screen_runs,
 )
 
 try:
@@ -76,6 +78,25 @@ jobs: dict = {}
 class AnalyzeRequest(BaseModel):
     ticker: str
     market: str = "US"  # "US" or "IL"
+
+    @staticmethod
+    def _validate_ticker(v: str) -> str:
+        import re as _re
+        v = v.strip().upper()
+        if not v or not _re.match(r"^[A-Z0-9]{1,10}(\.TA)?$", v):
+            raise ValueError(f"Invalid ticker: {v!r}")
+        return v
+
+    @staticmethod
+    def _validate_market(v: str) -> str:
+        v = v.strip().upper()
+        if v not in ("US", "IL"):
+            raise ValueError(f"market must be 'US' or 'IL', got {v!r}")
+        return v
+
+    def model_post_init(self, __context) -> None:
+        self.ticker = self._validate_ticker(self.ticker)
+        self.market = self._validate_market(self.market)
 
 
 class JobStatus(BaseModel):
@@ -241,6 +262,10 @@ async def health():
 @app.post("/analyze", response_model=dict, status_code=202)
 async def start_analysis(req: AnalyzeRequest, background_tasks: BackgroundTasks):
     job_id = str(uuid.uuid4())
+    # Evict oldest jobs when store is too large
+    if len(jobs) >= 500:
+        oldest_key = next(iter(jobs))
+        del jobs[oldest_key]
     jobs[job_id] = {
         "job_id": job_id,
         "status": "pending",
@@ -364,6 +389,12 @@ async def screen_latest():
     return {"run": run}
 
 
+@app.get("/screen/history")
+async def screen_history():
+    runs = await asyncio.to_thread(get_all_screen_runs)
+    return {"runs": runs}
+
+
 @app.get("/screen/stocks")
 async def screen_stocks():
     """Return full results of the most recently completed screen run."""
@@ -399,3 +430,49 @@ if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 3041))
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
+
+
+# ---------------------------------------------------------------------------
+# Retail Investor Quick Analysis
+# ---------------------------------------------------------------------------
+
+retail_jobs: dict = {}
+MAX_RETAIL_JOBS = 500  # prevent unbounded memory growth
+
+
+@app.post("/retail-analyze", status_code=202)
+async def start_retail_analysis(req: AnalyzeRequest, background_tasks: BackgroundTasks):
+    job_id = str(uuid.uuid4())
+    # Evict oldest jobs when store is too large
+    if len(retail_jobs) >= MAX_RETAIL_JOBS:
+        oldest_key = next(iter(retail_jobs))
+        del retail_jobs[oldest_key]
+    retail_jobs[job_id] = {"job_id": job_id, "status": "pending", "progress": 0, "result": None, "error": None}
+    background_tasks.add_task(_run_retail, job_id, req.ticker.upper(), req.market.upper())
+    return {"job_id": job_id}
+
+
+@app.get("/retail-status/{job_id}")
+async def get_retail_status(job_id: str):
+    job = retail_jobs.get(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return job
+
+
+async def _run_retail(job_id: str, ticker: str, market: str) -> None:
+    try:
+        retail_jobs[job_id]["status"] = "running"
+        retail_jobs[job_id]["progress"] = 10
+        stock_data = await fetch_stock_data(ticker, market)
+        if not stock_data:
+            raise ValueError(f"No data for {ticker}")
+        retail_jobs[job_id]["progress"] = 40
+        result = await analyze_retail(stock_data)
+        result["market"] = market
+        retail_jobs[job_id]["status"] = "done"
+        retail_jobs[job_id]["progress"] = 100
+        retail_jobs[job_id]["result"] = result
+    except Exception as exc:
+        retail_jobs[job_id]["status"] = "error"
+        retail_jobs[job_id]["error"] = str(exc)

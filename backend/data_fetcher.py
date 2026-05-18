@@ -1,9 +1,11 @@
+import re
 """
 data_fetcher.py — Pulls comprehensive stock data via yfinance.
 Israeli stocks: appends .TA suffix automatically when market == "IL".
 """
 
 import asyncio
+import math
 from typing import Optional
 import yfinance as yf
 
@@ -18,6 +20,19 @@ def _safe_get(obj, *keys, default=None):
         else:
             obj = getattr(obj, key, None)
     return obj if obj is not None else default
+
+
+def _sanitize_num(val):
+    """Return float or None — strips inf/nan."""
+    if val is None:
+        return None
+    try:
+        v = float(val)
+        if math.isnan(v) or math.isinf(v):
+            return None
+        return v
+    except Exception:
+        return None
 
 
 def _fetch_sync(ticker_symbol: str) -> Optional[dict]:
@@ -131,7 +146,7 @@ def _fetch_sync(ticker_symbol: str) -> Optional[dict]:
 
         financials = {
             # Valuation
-            "pe_ratio": info.get("trailingPE") or info.get("forwardPE"),
+            "pe_ratio": _sanitize_num(info.get("trailingPE") or info.get("forwardPE")),
             "forward_pe": info.get("forwardPE"),
             "pb_ratio": info.get("priceToBook"),
             "ps_ratio": info.get("priceToSalesTrailing12Months"),
@@ -223,7 +238,6 @@ def _fetch_sync(ticker_symbol: str) -> Optional[dict]:
 
 def _is_nan(val) -> bool:
     try:
-        import math
         return math.isnan(float(val))
     except Exception:
         return False
@@ -233,8 +247,15 @@ async def fetch_stock_data(ticker: str, market: str) -> dict:
     """
     Public async entry point.
     Appends .TA for Israeli stocks before calling yfinance.
+    Raises ValueError for clearly invalid tickers before hitting the network.
     """
-    symbol = ticker.upper()
+    if not ticker or not isinstance(ticker, str):
+        raise ValueError("ticker must be a non-empty string")
+    symbol = ticker.strip().upper()
+    if not re.match(r"^[A-Z0-9]{1,10}(\.TA)?$", symbol):
+        raise ValueError(f"Invalid ticker format: {symbol!r}")
+    if not re.match(r"^(US|IL)$", market.upper()):
+        raise ValueError(f"market must be 'US' or 'IL', got {market!r}")
     if market.upper() == "IL" and not symbol.endswith(".TA"):
         symbol = f"{symbol}.TA"
 
